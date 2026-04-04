@@ -158,9 +158,10 @@ const EcomLeadCapture = () => {
               <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
                 <div>
                   <label className="text-sm font-semibold text-foreground/70 mb-1.5 block">
-                    Current Platform
+                    Current Platform *
                   </label>
                   <select
+                    required
                     name="platform"
                     className="w-full px-4 py-3 rounded-xl bg-background border border-border text-sm focus:outline-none focus:border-primary transition-colors appearance-none"
                   >
@@ -175,9 +176,10 @@ const EcomLeadCapture = () => {
                 </div>
                 <div>
                   <label className="text-sm font-semibold text-foreground/70 mb-1.5 block">
-                    Monthly Revenue
+                    Monthly Revenue *
                   </label>
                   <select
+                    required
                     name="revenue"
                     className="w-full px-4 py-3 rounded-xl bg-background border border-border text-sm focus:outline-none focus:border-primary transition-colors appearance-none"
                   >
@@ -192,9 +194,10 @@ const EcomLeadCapture = () => {
               </div>
               <div>
                 <label className="text-sm font-semibold text-foreground/70 mb-1.5 block">
-                  Growth Goals
+                  Growth Goals *
                 </label>
                 <textarea
+                  required
                   rows={3}
                   name="message"
                   maxLength={1000}

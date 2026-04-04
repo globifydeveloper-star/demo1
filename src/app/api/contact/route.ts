@@ -31,37 +31,83 @@ export async function POST(request: Request) {
     const subjectLine = "New Lead Submission - Globify.in";
 
     const emailHtml = `
-      <div style="font-family: sans-serif; max-width: 600px; margin: 0 auto;">
-        <h2 style="color: #333;">New Lead Submission</h2>
-        <table style="width: 100%; border-collapse: collapse; margin-top: 20px;">
-          ${name ? `<tr><td style="padding: 8px; border-bottom: 1px solid #ddd;"><strong>Name:</strong></td><td style="padding: 8px; border-bottom: 1px solid #ddd;">${name}</td></tr>` : ""}
-          ${email ? `<tr><td style="padding: 8px; border-bottom: 1px solid #ddd;"><strong>Email:</strong></td><td style="padding: 8px; border-bottom: 1px solid #ddd;">${email}</td></tr>` : ""}
-          ${phone ? `<tr><td style="padding: 8px; border-bottom: 1px solid #ddd;"><strong>Phone:</strong></td><td style="padding: 8px; border-bottom: 1px solid #ddd;">${phone}</td></tr>` : ""}
-          ${company ? `<tr><td style="padding: 8px; border-bottom: 1px solid #ddd;"><strong>Company:</strong></td><td style="padding: 8px; border-bottom: 1px solid #ddd;">${company}</td></tr>` : ""}
-          ${service ? `<tr><td style="padding: 8px; border-bottom: 1px solid #ddd;"><strong>Service:</strong></td><td style="padding: 8px; border-bottom: 1px solid #ddd;">${service}</td></tr>` : ""}
-          ${plan ? `<tr><td style="padding: 8px; border-bottom: 1px solid #ddd;"><strong>Plan/Package:</strong></td><td style="padding: 8px; border-bottom: 1px solid #ddd;">${plan}</td></tr>` : ""}
-          ${projectType ? `<tr><td style="padding: 8px; border-bottom: 1px solid #ddd;"><strong>Project Type:</strong></td><td style="padding: 8px; border-bottom: 1px solid #ddd;">${projectType}</td></tr>` : ""}
-          ${budget ? `<tr><td style="padding: 8px; border-bottom: 1px solid #ddd;"><strong>Budget:</strong></td><td style="padding: 8px; border-bottom: 1px solid #ddd;">${budget}</td></tr>` : ""}
-        </table>
-        
-        <h3 style="margin-top: 30px; color: #333;">Message:</h3>
-        <p style="background-color: #f9f9f9; padding: 15px; border-radius: 5px; white-space: pre-wrap;">${message || "No message provided."}</p>
+      <div style="font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; max-width: 600px; margin: 0 auto; color: #171717; background-color: #FFFFFF; border: 1px solid #E5E5E5; border-radius: 8px; overflow: hidden; box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1);">
+        <div style="background-color: #0F1219; padding: 24px; text-align: center; border-bottom: 4px solid #E8590C;">
+          <h1 style="color: #FFFFFF; font-size: 24px; margin: 0; font-weight: 600; letter-spacing: -0.5px;">Globify Leads</h1>
+        </div>
+        <div style="padding: 32px 24px;">
+          <h2 style="color: #E8590C; font-size: 20px; margin-top: 0; margin-bottom: 24px;">New Lead Submission</h2>
+          <table style="width: 100%; border-collapse: collapse; font-size: 15px;">
+            ${name ? `<tr><td style="padding: 12px 0; border-bottom: 1px solid #E5E5E5; width: 35%; color: #737373;"><strong>Name:</strong></td><td style="padding: 12px 0; border-bottom: 1px solid #E5E5E5; font-weight: 500;">${name}</td></tr>` : ""}
+            ${email ? `<tr><td style="padding: 12px 0; border-bottom: 1px solid #E5E5E5; color: #737373;"><strong>Email:</strong></td><td style="padding: 12px 0; border-bottom: 1px solid #E5E5E5; font-weight: 500;">${email}</td></tr>` : ""}
+            ${phone ? `<tr><td style="padding: 12px 0; border-bottom: 1px solid #E5E5E5; color: #737373;"><strong>Phone:</strong></td><td style="padding: 12px 0; border-bottom: 1px solid #E5E5E5; font-weight: 500;">${phone}</td></tr>` : ""}
+            ${company ? `<tr><td style="padding: 12px 0; border-bottom: 1px solid #E5E5E5; color: #737373;"><strong>Company:</strong></td><td style="padding: 12px 0; border-bottom: 1px solid #E5E5E5; font-weight: 500;">${company}</td></tr>` : ""}
+            ${service ? `<tr><td style="padding: 12px 0; border-bottom: 1px solid #E5E5E5; color: #737373;"><strong>Service:</strong></td><td style="padding: 12px 0; border-bottom: 1px solid #E5E5E5; font-weight: 500;">${service}</td></tr>` : ""}
+            ${plan ? `<tr><td style="padding: 12px 0; border-bottom: 1px solid #E5E5E5; color: #737373;"><strong>Plan/Package:</strong></td><td style="padding: 12px 0; border-bottom: 1px solid #E5E5E5; font-weight: 500;">${plan}</td></tr>` : ""}
+            ${projectType ? `<tr><td style="padding: 12px 0; border-bottom: 1px solid #E5E5E5; color: #737373;"><strong>Project Type:</strong></td><td style="padding: 12px 0; border-bottom: 1px solid #E5E5E5; font-weight: 500;">${projectType}</td></tr>` : ""}
+            ${budget ? `<tr><td style="padding: 12px 0; border-bottom: 1px solid #E5E5E5; color: #737373;"><strong>Budget:</strong></td><td style="padding: 12px 0; border-bottom: 1px solid #E5E5E5; font-weight: 500;">${budget}</td></tr>` : ""}
+          </table>
+          
+          <h3 style="margin-top: 32px; margin-bottom: 12px; color: #E8590C; font-size: 16px;">Message:</h3>
+          <div style="background-color: #F9F9F9; padding: 16px; border-radius: 6px; border: 1px solid #E5E5E5; white-space: pre-wrap; font-size: 15px; color: #4A4A4A; line-height: 1.5;">${message || "No message provided."}</div>
+        </div>
       </div>
     `;
 
-    const { data: responseData, error } = await resend.emails.send({
+    const adminEmailPromise = resend.emails.send({
       from: "Globify Leads <noreply@globify.in>",
       to: "sales@globify.in",
       subject: subjectLine,
       html: emailHtml,
     });
 
-    if (error) {
-      console.error("Resend API Error:", error);
-      return NextResponse.json({ error: error.message }, { status: 400 });
+    // Fire the user confirmation email concurrently if email is provided
+    let userEmailPromise = null;
+    if (email) {
+      const userEmailHtml = `
+        <div style="font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; max-width: 600px; margin: 0 auto; color: #171717; background-color: #FFFFFF; border: 1px solid #E5E5E5; border-radius: 8px; overflow: hidden; box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1);">
+          <div style="background-color: #0F1219; padding: 24px; text-align: center; border-bottom: 4px solid #E8590C;">
+            <h1 style="color: #FFFFFF; font-size: 24px; margin: 0; font-weight: 600; letter-spacing: -0.5px;">Globify</h1>
+          </div>
+          <div style="padding: 32px 24px;">
+            <h2 style="color: #E8590C; font-size: 20px; margin-top: 0; margin-bottom: 16px;">Thanks for reaching out!</h2>
+            <p style="font-size: 16px; line-height: 1.5; margin-bottom: 16px;">Hi ${name ? name.split(' ')[0] : 'there'},</p>
+            <p style="font-size: 16px; line-height: 1.5; margin-bottom: 16px; color: #4A4A4A;">We've received your request and our team is currently reviewing it. One of our experts will get back to you within 24 hours.</p>
+            <p style="font-size: 16px; line-height: 1.5; margin-bottom: 24px; color: #4A4A4A;">If you have any immediate questions, feel free to reply directly to this email.</p>
+            <hr style="border: none; border-top: 1px solid #E5E5E5; margin: 24px 0;">
+            <p style="font-size: 15px; margin: 0; color: #171717;">Best regards,<br/><strong style="color: #E8590C;">The Globify Team</strong></p>
+          </div>
+          <div style="background-color: #F9F9F9; padding: 16px; text-align: center; font-size: 13px; color: #737373;">
+            <p style="margin: 0;">&copy; ${new Date().getFullYear()} Globify. All rights reserved.</p>
+          </div>
+        </div>
+      `;
+
+      userEmailPromise = resend.emails.send({
+        from: "Globify <noreply@globify.in>",
+        to: email,
+        subject: "We've received your inquiry - Globify",
+        html: userEmailHtml,
+      });
     }
 
-    return NextResponse.json({ success: true, responseData });
+    // Wait for both emails to finish
+    const [adminResult, userResult] = await Promise.all([
+      adminEmailPromise,
+      userEmailPromise,
+    ]);
+
+    if (adminResult.error) {
+      console.error("Resend API Error (Admin):", adminResult.error);
+      return NextResponse.json({ error: adminResult.error.message }, { status: 400 });
+    }
+
+    if (userResult && userResult.error) {
+      console.error("Resend API Error (User):", userResult.error);
+      // We still return success if the admin got the lead, but we log the error
+    }
+
+    return NextResponse.json({ success: true, responseData: adminResult.data });
   } catch (error) {
     console.error("Internal Error sending email:", error);
     return NextResponse.json(

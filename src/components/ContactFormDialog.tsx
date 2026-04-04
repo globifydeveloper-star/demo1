@@ -140,11 +140,12 @@ const ContactFormDialog = ({
                 htmlFor="phone"
                 className="text-hero-foreground/70 text-sm"
               >
-                Phone
+                Phone *
               </Label>
               <Input
                 id="phone"
                 name="phone"
+                required
                 maxLength={20}
                 placeholder="+971 50 000 0000"
                 className="bg-hero-foreground/5 border-hero-foreground/10 text-hero-foreground placeholder:text-hero-foreground/30"
@@ -171,11 +172,12 @@ const ContactFormDialog = ({
               htmlFor="service"
               className="text-hero-foreground/70 text-sm"
             >
-              Service Interested In
+              Service Interested In *
             </Label>
             <select
               id="service"
               name="service"
+              required
               defaultValue={detectedService}
               className="w-full h-10 rounded-md border bg-hero-foreground/5 border-hero-foreground/10 text-hero-foreground px-3 text-sm"
             >

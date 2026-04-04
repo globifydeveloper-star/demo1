@@ -97,9 +97,8 @@ const DTLeadCapture = () => {
                 <input
                   id="company"
                   name="company"
-                  required
                   maxLength={100}
-                  placeholder="Company *"
+                  placeholder="Company"
                   className="w-full px-4 py-3 rounded-lg bg-hero-foreground/5 border border-hero-foreground/10 text-hero-foreground text-sm placeholder:text-hero-foreground/30 focus:outline-none focus:border-primary/40"
                 />
               </div>
@@ -114,11 +113,12 @@ const DTLeadCapture = () => {
               />
               <div className="relative">
                 <select
+                  required
                   id="role"
                   name="role"
                   className="w-full px-4 py-3 rounded-lg bg-hero-foreground/5 border border-hero-foreground/10 text-hero-foreground text-sm focus:outline-none focus:border-primary/40 appearance-none pr-10"
                 >
-                  <option value="">Select Your Role</option>
+                  <option value="">Select Your Role *</option>
                   <option>CEO / Founder</option>
                   <option>CTO / Tech Lead</option>
                   <option>IT Manager</option>
@@ -142,9 +142,10 @@ const DTLeadCapture = () => {
               <textarea
                 id="challenges"
                 name="message"
+                required
                 rows={3}
                 maxLength={2000}
-                placeholder="Current challenges or goals..."
+                placeholder="Current challenges or goals... *"
                 className="w-full px-4 py-3 rounded-lg bg-hero-foreground/5 border border-hero-foreground/10 text-hero-foreground text-sm placeholder:text-hero-foreground/30 focus:outline-none focus:border-primary/40 resize-none"
               />
               <button

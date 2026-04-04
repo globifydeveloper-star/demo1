@@ -158,9 +158,10 @@ const WebDevLeadCapture = () => {
               </div>
               <div>
                 <label className="text-sm font-semibold text-foreground/70 mb-1.5 block">
-                  Estimated Budget
+                  Estimated Budget *
                 </label>
                 <select
+                  required
                   name="budget"
                   className="w-full px-4 py-3 rounded-xl bg-background border border-border text-sm text-foreground focus:outline-none focus:border-primary transition-colors appearance-none"
                 >
@@ -174,9 +175,10 @@ const WebDevLeadCapture = () => {
               </div>
               <div>
                 <label className="text-sm font-semibold text-foreground/70 mb-1.5 block">
-                  Tell Us About Your Project
+                  Tell Us About Your Project *
                 </label>
                 <textarea
+                  required
                   rows={4}
                   name="message"
                   maxLength={1000}

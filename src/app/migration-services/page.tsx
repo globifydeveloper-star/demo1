@@ -51,7 +51,7 @@ const InlineLeadForm = ({ id, variant = "dark" }: { id: string; variant?: "dark"
         <form onSubmit={handleStep2} className="flex flex-col gap-3">
           <p className={`text-xs font-medium ${isDark ? "text-white/60" : "text-muted"}`}>Tell us about your migration:</p>
           <Input required placeholder="Your name" className={`h-11 rounded-lg px-4 ${inputCls}`} />
-          <Input required placeholder="Company / Brand name" className={`h-11 rounded-lg px-4 ${inputCls}`} />
+          <Input placeholder="Company / Brand name" className={`h-11 rounded-lg px-4 ${inputCls}`} />
           <select required className={`h-11 rounded-lg px-4 text-sm border ${isDark ? "bg-white/10 border-white/20 text-white" : "bg-foreground/5 border-border text-foreground"}`}>
             <option value="">Current platform</option><option>Wix</option><option>Squarespace</option><option>WooCommerce</option><option>Magento 1</option><option>PrestaShop</option><option>Custom / Other</option>
           </select>

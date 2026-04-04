@@ -157,15 +157,15 @@ const ERPLeadCapture = () => {
                   <option>ERP audit & optimization</option>
                   <option>Other</option>
                 </SelectWithChevron>
-                <SelectWithChevron id="companySize" name="companySize">
-                  <option value="">Company Size</option>
+                <SelectWithChevron id="companySize" name="companySize" required>
+                  <option value="">Company Size *</option>
                   <option>1–50 employees</option>
                   <option>50–200 employees</option>
                   <option>200–1000 employees</option>
                   <option>1000+ employees</option>
                 </SelectWithChevron>
-                <SelectWithChevron id="timeline" name="timeline">
-                  <option value="">Timeline</option>
+                <SelectWithChevron id="timeline" name="timeline" required>
+                  <option value="">Timeline *</option>
                   <option>Immediate</option>
                   <option>1–3 months</option>
                   <option>3–6 months</option>
@@ -174,7 +174,8 @@ const ERPLeadCapture = () => {
                 <textarea
                   id="challenges"
                   name="message"
-                  placeholder="Key challenges or requirements..."
+                  required
+                  placeholder="Key challenges or requirements... *"
                   rows={3}
                   maxLength={2000}
                   className="w-full bg-hero-foreground/[0.04] border border-hero-foreground/[0.08] rounded-xl px-4 py-3 text-sm text-hero-foreground placeholder:text-hero-foreground/25 focus:outline-none focus:border-primary/40 resize-none"

@@ -166,9 +166,10 @@ const DMLeadCapture = () => {
               <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
                 <div>
                   <label className="text-sm font-semibold text-hero-foreground/60 mb-1.5 block">
-                    Monthly Budget
+                    Monthly Budget *
                   </label>
                   <select
+                    required
                     name="budget"
                     className="w-full px-4 py-3 rounded-xl bg-hero border border-hero-foreground/10 text-hero-foreground text-sm focus:outline-none focus:border-primary transition-colors appearance-none"
                   >
@@ -182,9 +183,10 @@ const DMLeadCapture = () => {
                 </div>
                 <div>
                   <label className="text-sm font-semibold text-hero-foreground/60 mb-1.5 block">
-                    Timeline
+                    Timeline *
                   </label>
                   <select
+                    required
                     name="timeline"
                     className="w-full px-4 py-3 rounded-xl bg-hero border border-hero-foreground/10 text-hero-foreground text-sm focus:outline-none focus:border-primary transition-colors appearance-none"
                   >
@@ -199,9 +201,10 @@ const DMLeadCapture = () => {
 
               <div>
                 <label className="text-sm font-semibold text-hero-foreground/60 mb-1.5 block">
-                  Primary Goals
+                  Primary Goals *
                 </label>
                 <textarea
+                  required
                   rows={3}
                   name="message"
                   maxLength={1000}

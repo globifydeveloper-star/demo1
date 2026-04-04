@@ -163,15 +163,15 @@ const AIAutoLeadCapture = () => {
                   <option>Microsoft Power Platform</option>
                   <option>Other</option>
                 </SelectWithChevron>
-                <SelectWithChevron id="budget" name="budget">
-                  <option value="">Budget Range</option>
+                <SelectWithChevron id="budget" name="budget" required>
+                  <option value="">Budget Range *</option>
                   <option>$5K – $15K</option>
                   <option>$15K – $50K</option>
                   <option>$50K – $150K</option>
                   <option>$150K+</option>
                 </SelectWithChevron>
-                <SelectWithChevron id="timeline" name="timeline">
-                  <option value="">Timeline</option>
+                <SelectWithChevron id="timeline" name="timeline" required>
+                  <option value="">Timeline *</option>
                   <option>Immediate (1–2 weeks)</option>
                   <option>1–3 months</option>
                   <option>3–6 months</option>
@@ -180,7 +180,8 @@ const AIAutoLeadCapture = () => {
                 <textarea
                   id="challenges"
                   name="message"
-                  placeholder="Key challenges or goals..."
+                  required
+                  placeholder="Key challenges or goals... *"
                   rows={3}
                   maxLength={2000}
                   className="w-full bg-hero-foreground/[0.04] border border-hero-foreground/[0.08] rounded-xl px-4 py-3 text-sm text-hero-foreground placeholder:text-hero-foreground/25 focus:outline-none focus:border-primary/40 resize-none"
