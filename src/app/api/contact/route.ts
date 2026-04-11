@@ -91,14 +91,19 @@ export async function POST(request: Request) {
       });
     }
 
-    // CRM Schema mapping
-    const crmName = name || "";
-    const crmEmail = email || "";
-    const crmPhone = phone || "";
-    const crmCompany = company || "N/A";
-    const crmCountry = "UAE";
-    const crmDescription = message || "";
-    const rawService = service || projectType || plan || "";
+    // 1. MAP DATA STRICTLY TO CRM SCHEMA
+    const getField = (possibleKeys: string[]) => {
+      const key = Object.keys(data).find(k => possibleKeys.some(pK => k.toLowerCase().includes(pK.toLowerCase())));
+      return key ? data[key] : "";
+    };
+
+    const crmName = getField(["Name"]);
+    const crmCompany = getField(["Company"]) || "N/A";
+    const crmEmail = getField(["Email"]);
+    const crmPhone = getField(["Phone"]);
+    const crmCountry = getField(["Country"]) || "UAE";
+    const crmDescription = getField(["Message", "Tell Us", "Project", "Requirements"]);
+    const rawService = getField(["Service", "Project Type", "Package"]);
     
     let serviceInterest = "Website Development";
     const serviceLower = rawService.toLowerCase();
@@ -109,6 +114,7 @@ export async function POST(request: Request) {
     else if (serviceLower.includes("ai") || serviceLower.includes("automation")) serviceInterest = "AI / Automation";
     else if (serviceLower.includes("migration") || serviceLower.includes("revamp")) serviceInterest = "Revamp / Migration";
 
+    // 2. SEND TO LOVABLE CRM
     const CRM_ENDPOINT = "https://tqfmxqbpvqqbpwlzpcgp.supabase.co/functions/v1/capture-lead";
     
     const crmPromise = fetch(CRM_ENDPOINT, {
