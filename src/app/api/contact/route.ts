@@ -55,7 +55,7 @@ export async function POST(request: Request) {
     `;
 
     const adminEmailPromise = resend.emails.send({
-      from: "Globify Leads <noreply@globify.in>",
+      from: "Globify Leads <noreply@globify.ae>",
       to: "sales@globify.in",
       subject: subjectLine,
       html: emailHtml,
@@ -84,7 +84,7 @@ export async function POST(request: Request) {
       `;
 
       userEmailPromise = resend.emails.send({
-        from: "Globify <noreply@globify.in>",
+        from: "Globify <noreply@globify.ae>",
         to: email,
         subject: "We've received your inquiry - Globify",
         html: userEmailHtml,
