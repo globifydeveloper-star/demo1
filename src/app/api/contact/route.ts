@@ -91,10 +91,50 @@ export async function POST(request: Request) {
       });
     }
 
-    // Wait for both emails to finish
+    // CRM Schema mapping
+    const crmName = name || "";
+    const crmEmail = email || "";
+    const crmPhone = phone || "";
+    const crmCompany = company || "N/A";
+    const crmCountry = "UAE";
+    const crmDescription = message || "";
+    const rawService = service || projectType || plan || "";
+    
+    let serviceInterest = "Website Development";
+    const serviceLower = rawService.toLowerCase();
+    if (serviceLower.includes("ecommerce") || serviceLower.includes("shopify") || serviceLower.includes("magento")) serviceInterest = "E-commerce Development";
+    else if (serviceLower.includes("erp") || serviceLower.includes("medoc") || serviceLower.includes("system")) serviceInterest = "ERP / Business System";
+    else if (serviceLower.includes("app")) serviceInterest = "Mobile App";
+    else if (serviceLower.includes("marketing") || serviceLower.includes("seo") || serviceLower.includes("ppc")) serviceInterest = "Digital Marketing";
+    else if (serviceLower.includes("ai") || serviceLower.includes("automation")) serviceInterest = "AI / Automation";
+    else if (serviceLower.includes("migration") || serviceLower.includes("revamp")) serviceInterest = "Revamp / Migration";
+
+    const CRM_ENDPOINT = "https://tqfmxqbpvqqbpwlzpcgp.supabase.co/functions/v1/capture-lead";
+    
+    const crmPromise = fetch(CRM_ENDPOINT, {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify({
+        name: crmName,
+        company: crmCompany,
+        email: crmEmail,
+        phone: crmPhone,
+        country: crmCountry,
+        description: crmDescription,
+        service_interest: serviceInterest,
+      }),
+    }).catch(err => {
+      console.error("Failed to send lead to CRM:", err);
+      return null;
+    });
+
+    // Wait for emails and CRM to finish
     const [adminResult, userResult] = await Promise.all([
       adminEmailPromise,
       userEmailPromise,
+      crmPromise,
     ]);
 
     if (adminResult.error) {
