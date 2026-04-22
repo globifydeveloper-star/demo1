@@ -1,12 +1,16 @@
 import { MetadataRoute } from 'next';
 
-// We import the static data here, but handle potential missing exports safely
-// For a deep Next.js app, generating a dynamic sitemap from known routes
 export default function sitemap(): MetadataRoute.Sitemap {
   const staticPages = [
     '', '/services', '/web-development', '/app-development',
     '/digital-marketing', '/ecommerce', '/ai-automation',
-    '/erp-solutions', '/about', '/projects', '/products'
+    '/erp-solutions', '/about', '/projects', '/products',
+    // Comprehensive sub-routes discovered to fix "Discovered but not indexed"
+    '/shopify-uae', '/woocommerce-development', '/wix-ecommerce',
+    '/shopify-plus', '/shopify-themes', '/magento-development',
+    '/prestashop-development', '/performance-marketing',
+    '/seo-content-strategy', '/process-automation', '/seo-aeo',
+    '/social-media-marketing', '/predictive-analytics', '/migration-services'
   ];
 
   return staticPages.map(url => ({

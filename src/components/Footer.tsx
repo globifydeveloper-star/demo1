@@ -143,12 +143,12 @@ const Footer = () => {
             <p className="text-sm text-section-dark-foreground/50 mb-4">
               Ready to start your next project? Reach out to our team for a free consultation.
             </p>
-            <button
-              onClick={() => window.location.href = ['ma','ilto:','sa','les@','glo','bify','.in'].join('')}
+            <Link
+              href="/contact"
               className="inline-flex items-center gap-2 px-5 py-3 rounded-full bg-primary text-primary-foreground text-sm font-semibold hover:bg-primary/90 transition-colors cursor-pointer"
             >
               <Mail className="w-4 h-4" /> Contact Us
-            </button>
+            </Link>
           </div>
         </div>
 

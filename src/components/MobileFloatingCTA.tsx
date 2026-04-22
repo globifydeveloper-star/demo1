@@ -30,7 +30,7 @@ const MobileFloatingCTA = () => {
             >
               <div className="flex items-center gap-2 w-full">
                 <a
-                  href="https://wa.me/919544086877?text=Hi%20Globify%2C%20I%27m%20interested%20in%20your%20services."
+                  href="https://wa.me/971547308673?text=Hi%20Globify%2C%20I%27m%20interested%20in%20your%20services."
                   target="_blank"
                   rel="noopener noreferrer"
                   className="w-11 h-11 sm:w-12 sm:h-12 rounded-full border-2 border-hero-foreground/30 flex items-center justify-center active:bg-hero-foreground/10 transition-colors flex-shrink-0 overflow-hidden"
@@ -45,7 +45,7 @@ const MobileFloatingCTA = () => {
                   Get Free Consultation
                 </button>
                 <a
-                  href="tel:+919544086877"
+                  href="tel:+971547308673"
                   className="w-11 h-11 sm:w-12 sm:h-12 rounded-full bg-foreground border-2 border-hero-foreground/30 flex items-center justify-center active:opacity-80 transition-opacity flex-shrink-0"
                   aria-label="Call us"
                 >

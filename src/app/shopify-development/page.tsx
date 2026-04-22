@@ -570,7 +570,7 @@ const ShopifyDevelopment = () => {
                 <Phone className="w-4 h-4" /> Book Strategy Call
               </Button>
               <a
-                href="https://wa.me/919544086877?text=Hi%20Globify%2C%20I%27m%20interested%20in%20Shopify%20development."
+                href="https://wa.me/971547308673?text=Hi%20Globify%2C%20I%27m%20interested%20in%20Shopify%20development."
                 target="_blank"
                 rel="noopener noreferrer"
                 className="inline-flex items-center gap-2 rounded-full px-6 py-2.5 bg-[#25D366] text-white text-sm font-semibold hover:bg-[#22c55e] transition-colors"
