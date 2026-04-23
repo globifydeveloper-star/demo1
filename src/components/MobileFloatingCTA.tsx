@@ -52,7 +52,7 @@ const MobileFloatingCTA = () => {
                    if (typeof window !== "undefined" && (window as any).gtag) {
                      (window as any).gtag('event', 'contact_call');
                      (window as any).gtag('event', 'conversion', {
-                       send_to: 'AW-17163382693/P9g4CM7ev6EcEKXfkfg_',
+                       send_to: 'AW-17163382693/470NCM_1kqEcEKXfkfg_',
                        value: 1.0,
                        currency: 'AED'
                      });
