@@ -37,8 +37,7 @@ const InlineLeadForm = ({ id, variant = "dark" }: { id: string; variant?: "dark"
   };
   const handleStep2 = (e: React.FormEvent) => {
     e.preventDefault();
-    setSubmitted(true);
-    toast.success("We'll be in touch within 24 hours!");
+    setSubmitted(true); typeof window !== "undefined" && (window as any).gtag && (window as any).gtag('event', 'generate_lead'); toast.success("We'll be in touch within 24 hours!");
   };
 
   const isDark = variant === "dark";
@@ -555,7 +554,7 @@ const WooCommerceDevelopment = () => {
                 target="_blank"
                 rel="noopener noreferrer"
                 className="inline-flex items-center gap-2 rounded-full px-6 py-2.5 bg-[#25D366] text-white text-sm font-semibold hover:bg-[#22c55e] transition-colors"
-              >
+               onClick={() => typeof window !== "undefined" && (window as any).gtag && (window as any).gtag('event', 'contact_whatsapp')}>
                 <MessageCircle className="w-4 h-4" /> WhatsApp Us
               </a>
             </motion.div>

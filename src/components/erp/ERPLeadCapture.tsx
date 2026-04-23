@@ -51,6 +51,7 @@ const ERPLeadCapture = () => {
         body: formData,
       });
       if (!res.ok) throw new Error("Failed to submit");
+      typeof window !== "undefined" && (window as any).gtag && (window as any).gtag('event', 'generate_lead');
       toast.success("Assessment Requested!", {
         description: "We'll be in touch within 24 hours.",
       });

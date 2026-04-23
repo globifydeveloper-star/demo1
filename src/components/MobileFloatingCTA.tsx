@@ -35,7 +35,7 @@ const MobileFloatingCTA = () => {
                   rel="noopener noreferrer"
                   className="w-11 h-11 sm:w-12 sm:h-12 rounded-full border-2 border-hero-foreground/30 flex items-center justify-center active:bg-hero-foreground/10 transition-colors flex-shrink-0 overflow-hidden"
                   aria-label="Chat on WhatsApp"
-                >
+                 onClick={() => typeof window !== "undefined" && (window as any).gtag && (window as any).gtag('event', 'contact_whatsapp')}>
                   <img src={whatsappIcon.src} alt="WhatsApp" className="w-full h-full object-cover" />
                 </a>
                 <button
@@ -48,7 +48,7 @@ const MobileFloatingCTA = () => {
                   href="tel:+971547308673"
                   className="w-11 h-11 sm:w-12 sm:h-12 rounded-full bg-foreground border-2 border-hero-foreground/30 flex items-center justify-center active:opacity-80 transition-opacity flex-shrink-0"
                   aria-label="Call us"
-                >
+                 onClick={() => typeof window !== "undefined" && (window as any).gtag && (window as any).gtag('event', 'contact_call')}>
                   <Phone className="w-5 h-5 text-background" />
                 </a>
               </div>

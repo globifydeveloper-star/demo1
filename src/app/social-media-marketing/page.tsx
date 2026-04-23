@@ -27,7 +27,7 @@ const InlineLeadForm = ({ id, variant = "dark" }: { id: string; variant?: "dark"
   const [submitted, setSubmitted] = useState(false);
 
   const handleStep1 = (e: React.FormEvent) => { e.preventDefault(); if (email) setStep(2); };
-  const handleStep2 = (e: React.FormEvent) => { e.preventDefault(); setSubmitted(true); toast.success("We'll be in touch within 24 hours!"); };
+  const handleStep2 = (e: React.FormEvent) => { e.preventDefault(); setSubmitted(true); typeof window !== "undefined" && (window as any).gtag && (window as any).gtag('event', 'generate_lead'); toast.success("We'll be in touch within 24 hours!"); };
 
   const isDark = variant === "dark";
   const inputCls = isDark ? "bg-white/10 border-white/20 text-white placeholder:text-white/40" : "bg-foreground/5 border-border text-foreground placeholder:text-muted";

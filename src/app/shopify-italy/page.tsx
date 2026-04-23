@@ -23,7 +23,7 @@ import shopifyLogo from "@/assets/shopify-logo.png";
 const InlineLeadForm = ({ id, variant = "dark" }: { id: string; variant?: "dark" | "light" }) => {
   const [step, setStep] = useState(1); const [email, setEmail] = useState(""); const [submitted, setSubmitted] = useState(false);
   const handleStep1 = (e: React.FormEvent) => { e.preventDefault(); if (email) setStep(2); };
-  const handleStep2 = (e: React.FormEvent) => { e.preventDefault(); setSubmitted(true); toast.success("Grazie! We'll be in touch within 24 hours!"); };
+  const handleStep2 = (e: React.FormEvent) => { e.preventDefault(); setSubmitted(true); typeof window !== "undefined" && (window as any).gtag && (window as any).gtag('event', 'generate_lead'); toast.success("Grazie! We'll be in touch within 24 hours!"); };
   const isDark = variant === "dark";
   const inputCls = isDark ? "bg-white/10 border-white/20 text-white placeholder:text-white/40" : "bg-foreground/5 border-border text-foreground placeholder:text-muted";
   if (submitted) return (<div className="flex flex-col items-center gap-3 py-6"><CheckCircle className="w-12 h-12 text-primary" /><p className={`font-semibold text-lg ${isDark ? "text-white" : "text-foreground"}`}>Grazie!</p><p className={`text-sm ${isDark ? "text-white/60" : "text-muted"}`}>Our Shopify experts will reach out within 24 hours.</p></div>);
@@ -204,7 +204,7 @@ const ShopifyItaly = () => {
             <motion.div variants={fadeUp} className="flex justify-center mb-6"><InlineLeadForm id="final-it" variant="dark" /></motion.div>
             <motion.div variants={fadeUp} className="flex flex-wrap justify-center gap-4 mt-6">
               <Button onClick={openContactDialog} variant="outline" className="rounded-full px-6 border-primary text-primary hover:bg-primary hover:text-primary-foreground gap-2"><Phone className="w-4 h-4" /> Book Strategy Call</Button>
-              <a href="https://wa.me/971547308673?text=Hi%20Globify%2C%20I%27m%20interested%20in%20Shopify%20development%20for%20Italy." target="_blank" rel="noopener noreferrer" className="inline-flex items-center gap-2 rounded-full px-6 py-2.5 bg-[#25D366] text-white text-sm font-semibold hover:bg-[#22c55e] transition-colors"><MessageCircle className="w-4 h-4" /> WhatsApp Us</a>
+              <a href="https://wa.me/971547308673?text=Hi%20Globify%2C%20I%27m%20interested%20in%20Shopify%20development%20for%20Italy." target="_blank" rel="noopener noreferrer" className="inline-flex items-center gap-2 rounded-full px-6 py-2.5 bg-[#25D366] text-white text-sm font-semibold hover:bg-[#22c55e] transition-colors" onClick={() => typeof window !== "undefined" && (window as any).gtag && (window as any).gtag('event', 'contact_whatsapp')}><MessageCircle className="w-4 h-4" /> WhatsApp Us</a>
             </motion.div>
           </motion.div>
         </div>

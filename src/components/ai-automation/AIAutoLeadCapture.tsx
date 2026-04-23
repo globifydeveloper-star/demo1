@@ -51,6 +51,7 @@ const AIAutoLeadCapture = () => {
         body: formData,
       });
       if (!res.ok) throw new Error("Failed to submit");
+      typeof window !== "undefined" && (window as any).gtag && (window as any).gtag('event', 'generate_lead');
       toast.success("Audit Requested!", {
         description: "We'll get back to you within 24 hours.",
       });

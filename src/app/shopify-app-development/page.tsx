@@ -38,7 +38,7 @@ const process = [
 
 const ShopifyAppDev = () => {
   const [submitted, setSubmitted] = useState(false);
-  const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => { e.preventDefault(); setSubmitted(true); };
+  const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => { e.preventDefault(); setSubmitted(true); typeof window !== "undefined" && (window as any).gtag && (window as any).gtag('event', 'generate_lead'); };
 
   return (
     <div className="min-h-screen">

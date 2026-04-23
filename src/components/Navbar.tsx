@@ -212,7 +212,7 @@ const Navbar = () => {
             rel="noopener noreferrer"
             className="w-9 h-9 rounded-full overflow-hidden flex items-center justify-center flex-shrink-0 hover:opacity-80 transition-opacity"
             aria-label="Chat on WhatsApp"
-          >
+           onClick={() => typeof window !== "undefined" && (window as any).gtag && (window as any).gtag('event', 'contact_whatsapp')}>
             <img src={whatsappIcon.src} alt="WhatsApp" className="w-full h-full object-cover" width={36} height={36} />
           </a>
           <button

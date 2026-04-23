@@ -78,6 +78,7 @@ const ContactFormDialog = ({
 
       if (!res.ok) throw new Error("Failed to submit");
 
+      typeof window !== "undefined" && (window as any).gtag && (window as any).gtag('event', 'generate_lead');
       toast.success("Thank you for reaching out!", {
         description: "We'll get back to you within 24 hours.",
       });

@@ -28,7 +28,7 @@ const InlineLeadForm = ({ id, variant = "dark" }: { id: string; variant?: "dark"
   const [email, setEmail] = useState("");
   const [submitted, setSubmitted] = useState(false);
   const handleStep1 = (e: React.FormEvent) => { e.preventDefault(); if (email) setStep(2); };
-  const handleStep2 = (e: React.FormEvent) => { e.preventDefault(); setSubmitted(true); toast.success("We'll be in touch within 24 hours!"); };
+  const handleStep2 = (e: React.FormEvent) => { e.preventDefault(); setSubmitted(true); typeof window !== "undefined" && (window as any).gtag && (window as any).gtag('event', 'generate_lead'); toast.success("We'll be in touch within 24 hours!"); };
   const isDark = variant === "dark";
   const inputCls = isDark ? "bg-white/10 border-white/20 text-white placeholder:text-white/40" : "bg-foreground/5 border-border text-foreground placeholder:text-muted";
 
@@ -260,7 +260,7 @@ const WixEcommerce = () => {
             <motion.div variants={fadeUp} className="flex justify-center mb-6"><InlineLeadForm id="final" variant="dark" /></motion.div>
             <motion.div variants={fadeUp} className="flex flex-wrap justify-center gap-4 mt-6">
               <Button onClick={openContactDialog} variant="outline" className="rounded-full px-6 border-primary text-primary hover:bg-primary hover:text-primary-foreground gap-2"><Phone className="w-4 h-4" /> Book Strategy Call</Button>
-              <a href="https://wa.me/971547308673?text=Hi%20Globify%2C%20I%27m%20interested%20in%20Wix%20e-commerce." target="_blank" rel="noopener noreferrer" className="inline-flex items-center gap-2 rounded-full px-6 py-2.5 bg-[#25D366] text-white text-sm font-semibold hover:bg-[#22c55e] transition-colors"><MessageCircle className="w-4 h-4" /> WhatsApp Us</a>
+              <a href="https://wa.me/971547308673?text=Hi%20Globify%2C%20I%27m%20interested%20in%20Wix%20e-commerce." target="_blank" rel="noopener noreferrer" className="inline-flex items-center gap-2 rounded-full px-6 py-2.5 bg-[#25D366] text-white text-sm font-semibold hover:bg-[#22c55e] transition-colors" onClick={() => typeof window !== "undefined" && (window as any).gtag && (window as any).gtag('event', 'contact_whatsapp')}><MessageCircle className="w-4 h-4" /> WhatsApp Us</a>
             </motion.div>
           </motion.div>
         </div>
