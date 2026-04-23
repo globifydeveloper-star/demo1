@@ -59,7 +59,16 @@ const Footer = () => {
                 <h5 className="font-semibold text-section-dark-foreground text-sm">{office.city}</h5>
               </div>
               <p className="text-sm text-section-dark-foreground/40 leading-relaxed mb-3">{office.address}</p>
-              <a href={`tel:${office.phone.replace(/\s/g, '')}`} className="flex items-center gap-2 text-sm text-section-dark-foreground/50 hover:text-primary transition-colors" onClick={() => typeof window !== "undefined" && (window as any).gtag && (window as any).gtag('event', 'contact_call')}>
+              <a href={`tel:${office.phone.replace(/\s/g, '')}`} className="flex items-center gap-2 text-sm text-section-dark-foreground/50 hover:text-primary transition-colors" onClick={() => {
+                if (typeof window !== "undefined" && (window as any).gtag) {
+                  (window as any).gtag('event', 'contact_call');
+                  (window as any).gtag('event', 'conversion', {
+                    send_to: 'AW-17163382693/P9g4CM7ev6EcEKXfkfg_',
+                    value: 1.0,
+                    currency: 'AED'
+                  });
+                }
+              }}>
                 <Phone className="w-3.5 h-3.5" /> {office.phone}
               </a>
             </div>
