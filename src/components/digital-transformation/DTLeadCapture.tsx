@@ -103,15 +103,26 @@ const DTLeadCapture = () => {
                   className="w-full px-4 py-3 rounded-lg bg-hero-foreground/5 border border-hero-foreground/10 text-hero-foreground text-sm placeholder:text-hero-foreground/30 focus:outline-none focus:border-primary/40"
                 />
               </div>
-              <input
-                id="email"
-                name="email"
-                required
-                type="email"
-                maxLength={255}
-                placeholder="Work Email *"
-                className="w-full px-4 py-3 rounded-lg bg-hero-foreground/5 border border-hero-foreground/10 text-hero-foreground text-sm placeholder:text-hero-foreground/30 focus:outline-none focus:border-primary/40"
-              />
+              <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                <input
+                  id="email"
+                  name="email"
+                  required
+                  type="email"
+                  maxLength={255}
+                  placeholder="Work Email *"
+                  className="w-full px-4 py-3 rounded-lg bg-hero-foreground/5 border border-hero-foreground/10 text-hero-foreground text-sm placeholder:text-hero-foreground/30 focus:outline-none focus:border-primary/40"
+                />
+                <input
+                  id="phone"
+                  name="phone"
+                  required
+                  type="tel"
+                  maxLength={20}
+                  placeholder="Phone Number *"
+                  className="w-full px-4 py-3 rounded-lg bg-hero-foreground/5 border border-hero-foreground/10 text-hero-foreground text-sm placeholder:text-hero-foreground/30 focus:outline-none focus:border-primary/40"
+                />
+              </div>
               <div className="relative">
                 <select
                   required

@@ -127,18 +127,33 @@ const AppDevLeadCapture = () => {
                   />
                 </div>
               </div>
-              <div>
-                <label className="text-sm font-semibold text-hero-foreground/60 mb-1.5 block">
-                  Email Address *
-                </label>
-                <input
-                  required
-                  type="email"
-                  name="email"
-                  maxLength={255}
-                  placeholder="john@company.com"
-                  className="w-full px-4 py-3 rounded-xl bg-hero border border-hero-foreground/10 text-hero-foreground text-sm placeholder:text-hero-foreground/25 focus:outline-none focus:border-primary transition-colors"
-                />
+              <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                <div>
+                  <label className="text-sm font-semibold text-hero-foreground/60 mb-1.5 block">
+                    Email Address *
+                  </label>
+                  <input
+                    required
+                    type="email"
+                    name="email"
+                    maxLength={255}
+                    placeholder="john@company.com"
+                    className="w-full px-4 py-3 rounded-xl bg-hero border border-hero-foreground/10 text-hero-foreground text-sm placeholder:text-hero-foreground/25 focus:outline-none focus:border-primary transition-colors"
+                  />
+                </div>
+                <div>
+                  <label className="text-sm font-semibold text-hero-foreground/60 mb-1.5 block">
+                    Phone Number *
+                  </label>
+                  <input
+                    required
+                    type="tel"
+                    name="phone"
+                    maxLength={20}
+                    placeholder="+971 50 000 0000"
+                    className="w-full px-4 py-3 rounded-xl bg-hero border border-hero-foreground/10 text-hero-foreground text-sm placeholder:text-hero-foreground/25 focus:outline-none focus:border-primary transition-colors"
+                  />
+                </div>
               </div>
               <div>
                 <label className="text-sm font-semibold text-hero-foreground/60 mb-1.5 block">

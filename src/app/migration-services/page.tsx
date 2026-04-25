@@ -19,7 +19,7 @@ import {
   ArrowRight, CheckCircle, TrendingUp, Zap, ShieldCheck, Clock, Star,
   BarChart3, Rocket, RefreshCw, ShoppingCart, Palette, Settings, Layers,
   Globe, HeadphonesIcon, Award, ChevronRight, MessageCircle, Phone,
-  AlertTriangle, Send, Code2, Database, Plug, Search, Server, Lock, Users
+  AlertTriangle, Send, Code2, Database, Plug, Search, Server, Lock, Users, Loader2
 } from "lucide-react";
 import { toast } from "sonner";
 
@@ -27,8 +27,32 @@ const InlineLeadForm = ({ id, variant = "dark" }: { id: string; variant?: "dark"
   const [step, setStep] = useState(1);
   const [email, setEmail] = useState("");
   const [submitted, setSubmitted] = useState(false);
+  const [isSubmitting, setIsSubmitting] = useState(false);
+
   const handleStep1 = (e: React.FormEvent) => { e.preventDefault(); if (email) setStep(2); };
-  const handleStep2 = (e: React.FormEvent) => { e.preventDefault(); setSubmitted(true); typeof window !== "undefined" && (window as any).gtag && (window as any).gtag('event', 'generate_lead'); toast.success("We'll be in touch within 24 hours!"); };
+  const handleStep2 = async (e: React.FormEvent<HTMLFormElement>) => {
+    e.preventDefault();
+    setIsSubmitting(true);
+    const formData = new FormData(e.currentTarget);
+    formData.append("email", email);
+    formData.append("source", `Migration Services - ${id}`);
+
+    try {
+      const res = await fetch("/api/contact", {
+        method: "POST",
+        body: formData,
+      });
+      if (!res.ok) throw new Error();
+      setSubmitted(true);
+      typeof window !== "undefined" && (window as any).gtag && (window as any).gtag('event', 'generate_lead');
+      toast.success("Thank you! We'll be in touch within 24 hours!");
+    } catch (error) {
+      toast.error("Something went wrong. Please try again.");
+    } finally {
+      setIsSubmitting(false);
+    }
+  };
+
   const isDark = variant === "dark";
   const inputCls = isDark ? "bg-white/10 border-white/20 text-white placeholder:text-white/40" : "bg-foreground/5 border-border text-foreground placeholder:text-muted";
 
@@ -50,12 +74,16 @@ const InlineLeadForm = ({ id, variant = "dark" }: { id: string; variant?: "dark"
       ) : (
         <form onSubmit={handleStep2} className="flex flex-col gap-3">
           <p className={`text-xs font-medium ${isDark ? "text-white/60" : "text-muted"}`}>Tell us about your migration:</p>
-          <Input required placeholder="Your name" className={`h-11 rounded-lg px-4 ${inputCls}`} />
-          <Input placeholder="Company / Brand name" className={`h-11 rounded-lg px-4 ${inputCls}`} />
-          <select required className={`h-11 rounded-lg px-4 text-sm border ${isDark ? "bg-white/10 border-white/20 text-white" : "bg-foreground/5 border-border text-foreground"}`}>
+          <Input required name="name" placeholder="Your name *" className={`h-11 rounded-lg px-4 ${inputCls}`} />
+          <Input required name="phone" type="tel" placeholder="Phone Number *" className={`h-11 rounded-lg px-4 ${inputCls}`} />
+          <Input name="company" placeholder="Company / Brand name" className={`h-11 rounded-lg px-4 ${inputCls}`} />
+          <select name="platform" required className={`h-11 rounded-lg px-4 text-sm border ${isDark ? "bg-white/10 border-white/20 text-white" : "bg-foreground/5 border-border text-foreground"}`}>
             <option value="">Current platform</option><option>Wix</option><option>Squarespace</option><option>WooCommerce</option><option>Magento 1</option><option>PrestaShop</option><option>Custom / Other</option>
           </select>
-          <Button type="submit" className="h-11 rounded-full bg-primary text-primary-foreground hover:bg-primary/90 font-semibold gap-2">Get Migration Plan <Send className="w-4 h-4" /></Button>
+          <Button type="submit" disabled={isSubmitting} className="h-11 rounded-full bg-primary text-primary-foreground hover:bg-primary/90 font-semibold gap-2">
+            {isSubmitting ? <Loader2 className="w-4 h-4 animate-spin" /> : <Send className="w-4 h-4" />}
+            {isSubmitting ? "Submitting..." : "Get Migration Plan"}
+          </Button>
         </form>
       )}
     </div>
@@ -277,7 +305,7 @@ const MigrationServices = () => {
             <motion.div variants={fadeUp} className="flex justify-center mb-6"><InlineLeadForm id="final" variant="dark" /></motion.div>
             <motion.div variants={fadeUp} className="flex flex-wrap justify-center gap-4 mt-6">
               <Button onClick={openContactDialog} variant="outline" className="rounded-full px-6 border-primary text-primary hover:bg-primary hover:text-primary-foreground gap-2"><Phone className="w-4 h-4" /> Book Strategy Call</Button>
-              <a href="https://wa.me/971547308673?text=Hi%20Globify%2C%20I%20need%20help%20migrating%20my%20e-commerce%20store." target="_blank" rel="noopener noreferrer" className="inline-flex items-center gap-2 rounded-full px-6 py-2.5 bg-[#25D366] text-white text-sm font-semibold hover:bg-[#22c55e] transition-colors" onClick={() => typeof window !== "undefined" && (window as any).gtag && (window as any).gtag('event', 'contact_whatsapp')}><MessageCircle className="w-4 h-4" /> WhatsApp Us</a>
+              <a href="https://wa.me/971547308673?text=Hi%20Globify%2C%20I%27m%20interested%20in%20migration%20services." target="_blank" rel="noopener noreferrer" className="inline-flex items-center gap-2 rounded-full px-6 py-2.5 bg-[#25D366] text-white text-sm font-semibold hover:bg-[#22c55e] transition-colors" onClick={() => typeof window !== "undefined" && (window as any).gtag && (window as any).gtag('event', 'contact_whatsapp')}><MessageCircle className="w-4 h-4" /> WhatsApp Us</a>
             </motion.div>
           </motion.div>
         </div>

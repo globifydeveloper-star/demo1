@@ -2,9 +2,10 @@
 
 import { useState } from "react";
 import { motion } from "framer-motion";
-import { ArrowRight, CheckCircle2, Send, Server, Layers, Globe, Zap, ShieldCheck, Code2, BarChart3, Cpu } from "lucide-react";
+import { ArrowRight, CheckCircle2, Send, Server, Layers, Globe, Zap, ShieldCheck, Code2, BarChart3, Cpu, Loader2 } from "lucide-react";
 import Navbar from "@/components/Navbar";
 import Footer from "@/components/Footer";
+import { toast } from "sonner";
 
 import CrossLinkSection from "@/components/CrossLinkSection";
 
@@ -42,7 +43,31 @@ const process = [
 
 const ShopifyPlus = () => {
   const [submitted, setSubmitted] = useState(false);
-  const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => { e.preventDefault(); setSubmitted(true); typeof window !== "undefined" && (window as any).gtag && (window as any).gtag('event', 'generate_lead'); };
+  const [isSubmitting, setIsSubmitting] = useState(false);
+
+  const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
+    e.preventDefault();
+    setIsSubmitting(true);
+    const formData = new FormData(e.currentTarget);
+    formData.append("source", "Shopify Plus & Headless");
+
+    try {
+      const res = await fetch("/api/contact", {
+        method: "POST",
+        body: formData,
+      });
+      if (!res.ok) throw new Error();
+      setSubmitted(true);
+      typeof window !== "undefined" && (window as any).gtag && (window as any).gtag('event', 'generate_lead');
+      toast.success("Consultation Requested!", {
+        description: "An enterprise consultant will reach out within 24 hours.",
+      });
+    } catch (error) {
+      toast.error("Something went wrong. Please try again.");
+    } finally {
+      setIsSubmitting(false);
+    }
+  };
 
   return (
     <div className="min-h-screen">
@@ -58,86 +83,82 @@ const ShopifyPlus = () => {
             <motion.div initial={{ opacity: 0, y: 30 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.6 }}>
               <p className="text-xs font-bold tracking-[0.3em] uppercase text-primary mb-5">Shopify Plus & Headless Commerce</p>
               <h1 className="text-4xl md:text-5xl lg:text-[3.5rem] font-bold text-hero-foreground leading-[1.08] mb-6">
-                Enterprise Commerce Without the{" "}
-                <span className="text-transparent bg-clip-text bg-gradient-to-r from-primary to-orange-300">Enterprise Headaches</span>
+                Enterprise Commerce at the<br />
+                <span className="text-transparent bg-clip-text bg-gradient-to-r from-primary to-orange-300">Speed of Headless</span>
               </h1>
-              <p className="text-hero-foreground/50 text-lg leading-relaxed mb-8 max-w-2xl">
-                Shopify Plus and headless architecture for brands doing $1M+ in revenue that need unlimited customization, global scalability, and sub-second page loads.
+              <p className="text-lg text-hero-foreground/70 leading-relaxed mb-10 max-w-2xl">
+                We build high-performance headless storefronts and enterprise-grade Shopify Plus stores for brands doing $10M+ in annual revenue. Blazing speed, infinite scale, total control.
               </p>
-              <div className="flex flex-col sm:flex-row gap-4 mb-10">
-                <a href="#lead-capture" className="inline-flex items-center justify-center gap-2 bg-primary text-primary-foreground px-8 py-4 rounded-full font-semibold text-sm hover:bg-primary/90 transition-all hover:gap-3">
-                  Get an Enterprise Assessment <ArrowRight className="w-4 h-4" />
+              <div className="flex flex-col sm:flex-row gap-4">
+                <a href="#lead-capture" className="inline-flex items-center justify-center gap-2 bg-primary text-primary-foreground px-8 py-4 rounded-full font-semibold text-sm hover:bg-primary/90 transition-all">
+                  Get Enterprise Assessment <ArrowRight className="w-4 h-4" />
                 </a>
-                <a href="#lead-capture" className="inline-flex items-center justify-center gap-2 border border-hero-foreground/20 text-hero-foreground/70 px-8 py-4 rounded-full font-semibold text-sm hover:border-primary/40 hover:text-primary transition-all">
-                  See Headless Demo
+                <a href="#headless-comparison" className="inline-flex items-center justify-center gap-2 bg-transparent border border-hero-foreground/10 text-hero-foreground px-8 py-4 rounded-full font-semibold text-sm hover:bg-hero-foreground/5 transition-all">
+                  <Cpu className="w-4 h-4" /> Why Headless?
                 </a>
-              </div>
-              <div className="flex flex-wrap gap-x-6 gap-y-2">
-                {["Shopify Plus Partner", "Hydrogen Certified", "Enterprise SLA"].map((item) => (
-                  <span key={item} className="flex items-center gap-2 text-xs text-hero-foreground/40"><CheckCircle2 className="w-3.5 h-3.5 text-primary" />{item}</span>
-                ))}
               </div>
             </motion.div>
           </div>
         </div>
       </section>
 
-      {/* Stats */}
-      <section className="bg-section-dark border-y border-section-dark-foreground/[0.06] py-8">
+      {/* Stats Bar */}
+      <section className="py-12 bg-card border-b border-border">
         <div className="container mx-auto px-6">
           <div className="grid grid-cols-2 md:grid-cols-4 gap-8">
-            {stats.map((s, i) => (
-              <motion.div key={s.label} initial={{ opacity: 0, y: 10 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true }} transition={{ delay: i * 0.1 }} className="text-center">
-                <div className="text-2xl md:text-3xl font-bold text-primary">{s.value}</div>
-                <div className="text-xs text-section-dark-foreground/40 mt-1">{s.label}</div>
-              </motion.div>
+            {stats.map((stat) => (
+              <div key={stat.label} className="text-center">
+                <div className="text-3xl font-bold text-foreground mb-1">{stat.value}</div>
+                <div className="text-xs text-muted-foreground uppercase tracking-widest font-semibold">{stat.label}</div>
+              </div>
             ))}
           </div>
         </div>
       </section>
 
       {/* Capabilities */}
-      <section className="py-24 bg-background">
+      <section id="capabilities" className="py-24 bg-background">
         <div className="container mx-auto px-6">
-          <motion.div initial={{ opacity: 0, y: 20 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true }} className="text-center mb-16">
-            <p className="text-xs font-bold tracking-[0.3em] uppercase text-primary mb-4">Enterprise Capabilities</p>
-            <h2 className="text-3xl md:text-4xl font-bold leading-[1.1] mb-4">Everything You Need to Dominate at Scale</h2>
-            <p className="text-muted-foreground max-w-xl mx-auto text-sm">Shopify Plus gives you the platform. We give you the strategy, architecture, and execution to extract maximum ROI from it.</p>
-          </motion.div>
-          <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-6">
-            {capabilities.map((s, i) => (
-              <motion.div key={s.title} initial={{ opacity: 0, y: 20 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true }} transition={{ delay: i * 0.05 }} className="p-6 rounded-2xl border border-border bg-card hover:border-primary/20 transition-colors group">
-                <s.icon className="w-8 h-8 text-primary mb-4 group-hover:scale-110 transition-transform" />
-                <h3 className="font-semibold text-lg mb-2">{s.title}</h3>
-                <p className="text-sm text-muted-foreground leading-relaxed">{s.desc}</p>
-              </motion.div>
+          <div className="text-center max-w-2xl mx-auto mb-16">
+            <h2 className="text-3xl md:text-4xl font-semibold mb-5">Enterprise Capabilities</h2>
+            <p className="text-muted-foreground text-sm leading-relaxed">Shopify Plus is more than just a checkout. It's a full-stack enterprise commerce engine that we help you leverage to its full potential.</p>
+          </div>
+          <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-8">
+            {capabilities.map((item) => (
+              <div key={item.title} className="p-8 rounded-2xl border border-border bg-card hover:border-primary/20 transition-all group">
+                <div className="w-12 h-12 rounded-xl bg-primary/10 flex items-center justify-center mb-6 text-primary group-hover:scale-110 transition-transform">
+                  <item.icon className="w-6 h-6" />
+                </div>
+                <h3 className="text-lg font-semibold mb-3">{item.title}</h3>
+                <p className="text-muted-foreground text-sm leading-relaxed">{item.desc}</p>
+              </div>
             ))}
           </div>
         </div>
       </section>
 
-      {/* Headless vs Theme Comparison */}
-      <section className="py-24 bg-section-dark">
+      {/* Headless Comparison */}
+      <section id="headless-comparison" className="py-24 bg-card border-y border-border">
         <div className="container mx-auto px-6">
-          <motion.div initial={{ opacity: 0, y: 20 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true }} className="text-center mb-16">
-            <p className="text-xs font-bold tracking-[0.3em] uppercase text-primary mb-4">Headless vs Traditional</p>
-            <h2 className="text-3xl md:text-4xl font-bold text-section-dark-foreground leading-[1.1]">When Does Headless Make Sense?</h2>
-          </motion.div>
-          <div className="max-w-4xl mx-auto overflow-x-auto">
-            <table className="w-full text-sm">
-              <thead>
-                <tr className="border-b border-section-dark-foreground/10">
-                  <th className="text-left py-4 px-4 text-section-dark-foreground/60 font-medium">Feature</th>
-                  <th className="text-center py-4 px-4 text-section-dark-foreground/60 font-medium">Traditional Theme</th>
-                  <th className="text-center py-4 px-4 text-primary font-semibold">Headless (Hydrogen)</th>
+          <div className="text-center max-w-2xl mx-auto mb-16">
+            <h2 className="text-3xl md:text-4xl font-semibold mb-5">Headless vs. Theme Architecture</h2>
+            <p className="text-muted-foreground text-sm leading-relaxed">Understanding which approach fits your brand's scale, complexity, and performance requirements.</p>
+          </div>
+          <div className="max-w-4xl mx-auto overflow-hidden rounded-2xl border border-border shadow-sm">
+            <table className="w-full text-left text-sm border-collapse">
+              <thead className="bg-muted/50 border-b border-border">
+                <tr>
+                  <th className="px-6 py-4 font-semibold text-foreground">Feature</th>
+                  <th className="px-6 py-4 font-semibold text-foreground">Liquid Theme</th>
+                  <th className="px-6 py-4 font-semibold text-primary bg-primary/5">Headless Commerce</th>
                 </tr>
               </thead>
-              <tbody>
+              <tbody className="divide-y divide-border bg-background">
                 {headlessVsTheme.map((row) => (
-                  <tr key={row.feature} className="border-b border-section-dark-foreground/5">
-                    <td className="py-3 px-4 text-section-dark-foreground/80 font-medium">{row.feature}</td>
-                    <td className="py-3 px-4 text-center text-section-dark-foreground/50">{row.theme}</td>
-                    <td className="py-3 px-4 text-center text-section-dark-foreground/90">{row.headless}</td>
+                  <tr key={row.feature} className="hover:bg-muted/30 transition-colors">
+                    <td className="px-6 py-4 font-medium text-foreground">{row.feature}</td>
+                    <td className="px-6 py-4 text-muted-foreground">{row.theme}</td>
+                    <td className="px-6 py-4 text-foreground font-medium bg-primary/5">{row.headless}</td>
                   </tr>
                 ))}
               </tbody>
@@ -149,17 +170,19 @@ const ShopifyPlus = () => {
       {/* Process */}
       <section className="py-24 bg-background">
         <div className="container mx-auto px-6">
-          <motion.div initial={{ opacity: 0, y: 20 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true }} className="text-center mb-16">
-            <p className="text-xs font-bold tracking-[0.3em] uppercase text-primary mb-4">Migration & Launch</p>
-            <h2 className="text-3xl md:text-4xl font-bold leading-[1.1]">Zero-Downtime Migration in 4 Phases</h2>
-          </motion.div>
-          <div className="grid md:grid-cols-2 lg:grid-cols-4 gap-6 max-w-5xl mx-auto">
-            {process.map((p, i) => (
-              <motion.div key={p.step} initial={{ opacity: 0, y: 20 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true }} transition={{ delay: i * 0.1 }} className="p-6 rounded-2xl border border-border bg-card">
-                <span className="text-4xl font-bold text-primary/20 mb-3 block">{p.step}</span>
-                <h3 className="font-semibold mb-2">{p.title}</h3>
-                <p className="text-sm text-muted-foreground leading-relaxed">{p.desc}</p>
-              </motion.div>
+          <div className="text-center max-w-2xl mx-auto mb-16">
+            <h2 className="text-3xl md:text-4xl font-semibold mb-5">The Enterprise Lifecycle</h2>
+            <p className="text-muted-foreground text-sm leading-relaxed">A rigorous methodology designed for complex migrations and high-stakes commerce operations.</p>
+          </div>
+          <div className="grid md:grid-cols-4 gap-8">
+            {process.map((step) => (
+              <div key={step.step} className="relative group">
+                <div className="text-[5rem] font-black text-foreground/[0.03] absolute -top-8 -left-2 leading-none group-hover:text-primary/[0.05] transition-colors">{step.step}</div>
+                <div className="relative pt-4">
+                  <h3 className="text-lg font-semibold mb-3 text-primary">{step.title}</h3>
+                  <p className="text-muted-foreground text-sm leading-relaxed">{step.desc}</p>
+                </div>
+              </div>
             ))}
           </div>
         </div>
@@ -171,10 +194,10 @@ const ShopifyPlus = () => {
           <div className="max-w-5xl mx-auto grid lg:grid-cols-2 gap-12 items-start">
             <motion.div initial={{ opacity: 0, y: 20 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true }}>
               <p className="text-xs font-bold tracking-[0.3em] uppercase text-primary mb-3">Enterprise Consultation</p>
-              <h2 className="text-3xl md:text-4xl font-semibold leading-[1.1] mb-5">Ready to Move to<br />Shopify Plus?</h2>
-              <p className="text-muted-foreground text-sm leading-relaxed mb-8">Get a free platform assessment and migration roadmap. We'll analyze your current setup and show you the ROI of upgrading to Plus or going headless.</p>
-              <div className="space-y-4">
-                {["Free platform assessment & ROI analysis", "Migration roadmap with zero-downtime plan", "Headless vs traditional recommendation", "Enterprise SLA & dedicated support team"].map((item) => (
+              <h2 className="text-3xl md:text-4xl font-semibold leading-[1.1] mb-5">Is Your Brand Ready for<br />Shopify Plus?</h2>
+              <p className="text-muted-foreground text-sm leading-relaxed mb-8">Speak with our enterprise strategists to discuss migration paths, headless architecture, and how to scale your brand to the next level.</p>
+              <div className="space-y-4 mb-10">
+                {["Shopify Plus certified architecture", "Zero-downtime platform migrations", "Hydrogen & Oxygen headless deployment", "Advanced B2B & Wholesale setup"].map((item) => (
                   <div key={item} className="flex items-center gap-3"><CheckCircle2 className="w-4 h-4 text-primary flex-shrink-0" /><span className="text-sm text-foreground/70">{item}</span></div>
                 ))}
               </div>
@@ -184,49 +207,48 @@ const ShopifyPlus = () => {
               {submitted ? (
                 <div className="p-10 rounded-2xl border border-primary/20 bg-primary/5 text-center">
                   <CheckCircle2 className="w-12 h-12 text-primary mx-auto mb-4" />
-                  <h3 className="text-xl font-semibold mb-2">Thank You!</h3>
-                  <p className="text-sm text-muted-foreground">Our enterprise team will review your requirements and respond within 24 hours with a detailed assessment.</p>
+                  <h3 className="text-xl font-semibold mb-2">Message Sent</h3>
+                  <p className="text-sm text-muted-foreground">Our enterprise account team will reach out within 24 hours.</p>
                 </div>
               ) : (
                 <form onSubmit={handleSubmit} className="p-8 rounded-2xl border border-border bg-background space-y-5">
                   <div className="grid grid-cols-2 gap-4">
                     <div>
                       <label className="text-xs font-semibold text-foreground/70 mb-1.5 block">Full Name *</label>
-                      <input required type="text" placeholder="John Doe" className="w-full px-4 py-3 rounded-xl bg-card border border-border text-sm placeholder:text-muted-foreground/40 focus:outline-none focus:border-primary transition-colors" />
+                      <input required name="name" type="text" placeholder="John Doe" className="w-full px-4 py-3 rounded-xl bg-card border border-border text-sm placeholder:text-muted-foreground/40 focus:outline-none focus:border-primary transition-colors" />
                     </div>
                     <div>
-                      <label className="text-xs font-semibold text-foreground/70 mb-1.5 block">Email *</label>
-                      <input required type="email" placeholder="john@enterprise.com" className="w-full px-4 py-3 rounded-xl bg-card border border-border text-sm placeholder:text-muted-foreground/40 focus:outline-none focus:border-primary transition-colors" />
+                      <label className="text-xs font-semibold text-foreground/70 mb-1.5 block">Work Email *</label>
+                      <input required name="email" type="email" placeholder="john@enterprise.com" className="w-full px-4 py-3 rounded-xl bg-card border border-border text-sm placeholder:text-muted-foreground/40 focus:outline-none focus:border-primary transition-colors" />
+                    </div>
+                  </div>
+                  <div className="grid grid-cols-2 gap-4">
+                    <div>
+                      <label className="text-xs font-semibold text-foreground/70 mb-1.5 block">Phone Number *</label>
+                      <input required name="phone" type="tel" placeholder="+971 50 000 0000" className="w-full px-4 py-3 rounded-xl bg-card border border-border text-sm placeholder:text-muted-foreground/40 focus:outline-none focus:border-primary transition-colors" />
+                    </div>
+                    <div>
+                      <label className="text-xs font-semibold text-foreground/70 mb-1.5 block">Company Name</label>
+                      <input name="company" type="text" placeholder="Your Brand" className="w-full px-4 py-3 rounded-xl bg-card border border-border text-sm placeholder:text-muted-foreground/40 focus:outline-none focus:border-primary transition-colors" />
                     </div>
                   </div>
                   <div>
-                    <label className="text-xs font-semibold text-foreground/70 mb-1.5 block">Current Platform *</label>
-                    <select required className="w-full px-4 py-3 rounded-xl bg-card border border-border text-sm focus:outline-none focus:border-primary transition-colors appearance-none">
-                      <option value="">Select platform</option>
-                      <option>Shopify (Basic/Standard)</option>
-                      <option>Magento / Adobe Commerce</option>
-                      <option>WooCommerce</option>
-                      <option>BigCommerce</option>
-                      <option>Custom / Headless</option>
-                      <option>Other</option>
-                    </select>
-                  </div>
-                  <div>
-                    <label className="text-xs font-semibold text-foreground/70 mb-1.5 block">Annual Revenue *</label>
-                    <select required className="w-full px-4 py-3 rounded-xl bg-card border border-border text-sm focus:outline-none focus:border-primary transition-colors appearance-none">
+                    <label className="text-xs font-semibold text-foreground/70 mb-1.5 block">Annual Revenue Range</label>
+                    <select name="revenue" className="w-full px-4 py-3 rounded-xl bg-card border border-border text-sm focus:outline-none focus:border-primary transition-colors appearance-none">
                       <option value="">Select range</option>
-                      <option>$500K – $1M</option>
                       <option>$1M – $5M</option>
                       <option>$5M – $20M</option>
-                      <option>$20M+</option>
+                      <option>$20M – $50M</option>
+                      <option>$50M+</option>
                     </select>
                   </div>
                   <div>
-                    <label className="text-xs font-semibold text-foreground/70 mb-1.5 block">What are your primary goals?</label>
-                    <textarea rows={3} placeholder="e.g., Migrate to Plus, go headless, expand internationally, reduce page load times..." className="w-full px-4 py-3 rounded-xl bg-card border border-border text-sm placeholder:text-muted-foreground/40 focus:outline-none focus:border-primary transition-colors resize-none" />
+                    <label className="text-xs font-semibold text-foreground/70 mb-1.5 block">Tell us about your project</label>
+                    <textarea name="message" rows={3} placeholder="e.g., Migrating from Magento, launching a headless storefront, B2B wholesale setup..." className="w-full px-4 py-3 rounded-xl bg-card border border-border text-sm placeholder:text-muted-foreground/40 focus:outline-none focus:border-primary transition-colors resize-none" />
                   </div>
-                  <button type="submit" className="w-full flex items-center justify-center gap-2 bg-primary text-primary-foreground px-8 py-4 rounded-full font-semibold text-sm hover:bg-primary/90 transition-all">
-                    <Send className="w-4 h-4" /> Get Your Free Enterprise Assessment
+                  <button type="submit" disabled={isSubmitting} className="w-full flex items-center justify-center gap-2 bg-primary text-primary-foreground px-8 py-4 rounded-full font-semibold text-sm hover:bg-primary/90 transition-all">
+                    {isSubmitting ? <Loader2 className="w-4 h-4 animate-spin" /> : <Send className="w-4 h-4" />}
+                    {isSubmitting ? "Submitting..." : "Book Enterprise Consultation"}
                   </button>
                   <p className="text-[11px] text-muted-foreground/50 text-center">By submitting, you agree to our Privacy Policy. Response within 24 hours.</p>
                 </form>
@@ -236,7 +258,7 @@ const ShopifyPlus = () => {
         </div>
       </section>
 
-      <CrossLinkSection currentPage="shopify-plus" links={["shopify-dev", "shopify-themes", "shopify-apps", "ecommerce", "erp", "ai-automation"]} variant="light" />
+      <CrossLinkSection currentPage="shopify-plus" links={["shopify-dev", "shopify-themes", "shopify-apps", "ecommerce", "erp", "cro"]} variant="light" />
       <Footer />
     </div>
   );

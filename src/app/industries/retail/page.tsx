@@ -3,9 +3,10 @@
 import { useState } from "react";
 import CrossLinkSection from "@/components/CrossLinkSection";
 import { motion } from "framer-motion";
-import { ArrowRight, CheckCircle2, Send, ShoppingCart, Store, Smartphone, BarChart3, Users, Zap, Eye, Package, Truck, Brain, Shield, TrendingUp } from "lucide-react";
+import { ArrowRight, CheckCircle2, Send, ShoppingCart, Store, Smartphone, BarChart3, Users, Zap, Eye, Package, Truck, Brain, Shield, TrendingUp, Loader2 } from "lucide-react";
 import Navbar from "@/components/Navbar";
 import Footer from "@/components/Footer";
+import { toast } from "sonner";
 
 
 const stats = [
@@ -35,7 +36,29 @@ const whyGlobify = [
 
 const IndustryRetail = () => {
   const [submitted, setSubmitted] = useState(false);
-  const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => { e.preventDefault(); setSubmitted(true); };
+  const [isSubmitting, setIsSubmitting] = useState(false);
+
+  const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
+    e.preventDefault();
+    setIsSubmitting(true);
+    const formData = new FormData(e.currentTarget);
+    try {
+      const res = await fetch("/api/contact", {
+        method: "POST",
+        body: formData,
+      });
+      if (!res.ok) throw new Error("Failed to submit");
+      setSubmitted(true);
+      typeof window !== "undefined" && (window as any).gtag && (window as any).gtag('event', 'generate_lead');
+      toast.success("Audit Requested!", {
+        description: "Our retail team will respond within 24 hours.",
+      });
+    } catch (error) {
+      toast.error("Something went wrong. Please try again later.");
+    } finally {
+      setIsSubmitting(false);
+    }
+  };
 
   return (
     <div className="min-h-screen">
@@ -51,7 +74,7 @@ const IndustryRetail = () => {
               <p className="text-xs font-bold tracking-[0.3em] uppercase text-primary mb-5">AI-Powered Retail</p>
               <h1 className="text-4xl md:text-5xl lg:text-[3.5rem] font-bold text-hero-foreground leading-[1.08] mb-6">
                 Intelligent Commerce{" "}
-                <span className="text-transparent bg-clip-text bg-gradient-to-r from-primary to-orange-300">That Predicts, Personalizes & Scales</span>
+                <span className="text-transparent bg-clip-text bg-gradient-to-r from-primary to-orange-300">That Predict, Personalizes & Scales</span>
               </h1>
               <p className="text-hero-foreground/50 text-lg leading-relaxed mb-8 max-w-2xl">
                 AI-powered personalization, predictive inventory, and autonomous fulfillment, engineering 3.2x conversion lifts and $200M+ in revenue for retail brands worldwide.
@@ -150,17 +173,23 @@ const IndustryRetail = () => {
               ) : (
                 <form onSubmit={handleSubmit} className="p-8 rounded-2xl border border-border bg-card space-y-5">
                   <div className="grid grid-cols-2 gap-4">
-                    <div><label className="text-xs font-semibold text-foreground/70 mb-1.5 block">Full Name *</label><input required type="text" placeholder="John Doe" className="w-full px-4 py-3 rounded-xl bg-background border border-border text-sm placeholder:text-muted-foreground/40 focus:outline-none focus:border-primary transition-colors" /></div>
-                    <div><label className="text-xs font-semibold text-foreground/70 mb-1.5 block">Brand Name</label><input type="text" placeholder="Your Brand" className="w-full px-4 py-3 rounded-xl bg-background border border-border text-sm placeholder:text-muted-foreground/40 focus:outline-none focus:border-primary transition-colors" /></div>
+                    <div><label className="text-xs font-semibold text-foreground/70 mb-1.5 block">Full Name *</label><input required name="name" type="text" placeholder="John Doe" className="w-full px-4 py-3 rounded-xl bg-background border border-border text-sm placeholder:text-muted-foreground/40 focus:outline-none focus:border-primary transition-colors" /></div>
+                    <div><label className="text-xs font-semibold text-foreground/70 mb-1.5 block">Brand Name</label><input name="company" type="text" placeholder="Your Brand" className="w-full px-4 py-3 rounded-xl bg-background border border-border text-sm placeholder:text-muted-foreground/40 focus:outline-none focus:border-primary transition-colors" /></div>
                   </div>
-                  <div><label className="text-xs font-semibold text-foreground/70 mb-1.5 block">Email Address *</label><input required type="email" placeholder="john@brand.com" className="w-full px-4 py-3 rounded-xl bg-background border border-border text-sm placeholder:text-muted-foreground/40 focus:outline-none focus:border-primary transition-colors" /></div>
+                  <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                    <div><label className="text-xs font-semibold text-foreground/70 mb-1.5 block">Email Address *</label><input required name="email" type="email" placeholder="john@brand.com" className="w-full px-4 py-3 rounded-xl bg-background border border-border text-sm placeholder:text-muted-foreground/40 focus:outline-none focus:border-primary transition-colors" /></div>
+                    <div><label className="text-xs font-semibold text-foreground/70 mb-1.5 block">Phone Number *</label><input required name="phone" type="tel" placeholder="+971 50 000 0000" className="w-full px-4 py-3 rounded-xl bg-background border border-border text-sm placeholder:text-muted-foreground/40 focus:outline-none focus:border-primary transition-colors" /></div>
+                  </div>
                   <div><label className="text-xs font-semibold text-foreground/70 mb-1.5 block">Business Type *</label>
-                    <select required className="w-full px-4 py-3 rounded-xl bg-background border border-border text-sm focus:outline-none focus:border-primary transition-colors appearance-none">
+                    <select required name="projectType" className="w-full px-4 py-3 rounded-xl bg-background border border-border text-sm focus:outline-none focus:border-primary transition-colors appearance-none">
                       <option value="">Select type</option><option>D2C Brand</option><option>Omnichannel Retailer</option><option>Marketplace Seller</option><option>Brick & Mortar</option><option>Startup</option><option>Other</option>
                     </select>
                   </div>
-                  <div><label className="text-xs font-semibold text-foreground/70 mb-1.5 block">Growth Goals</label><textarea rows={3} placeholder="What are your main retail goals?" className="w-full px-4 py-3 rounded-xl bg-background border border-border text-sm placeholder:text-muted-foreground/40 focus:outline-none focus:border-primary transition-colors resize-none" /></div>
-                  <button type="submit" className="w-full flex items-center justify-center gap-2 bg-primary text-primary-foreground px-8 py-4 rounded-full font-semibold text-sm hover:bg-primary/90 transition-all"><Send className="w-4 h-4" /> Get Your Free Retail Audit</button>
+                  <div><label className="text-xs font-semibold text-foreground/70 mb-1.5 block">Growth Goals</label><textarea name="message" rows={3} placeholder="What are your main retail goals?" className="w-full px-4 py-3 rounded-xl bg-background border border-border text-sm placeholder:text-muted-foreground/40 focus:outline-none focus:border-primary transition-colors resize-none" /></div>
+                  <button type="submit" disabled={isSubmitting} className="w-full flex items-center justify-center gap-2 bg-primary text-primary-foreground px-8 py-4 rounded-full font-semibold text-sm hover:bg-primary/90 transition-all">
+                    {isSubmitting ? <Loader2 className="w-4 h-4 animate-spin" /> : <Send className="w-4 h-4" />}
+                    {isSubmitting ? "Submitting..." : "Get Your Free Retail Audit"}
+                  </button>
                   <p className="text-[11px] text-muted-foreground/50 text-center">By submitting, you agree to our Privacy Policy. We'll respond within 24 hours.</p>
                 </form>
               )}

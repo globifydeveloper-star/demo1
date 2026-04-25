@@ -121,28 +121,98 @@ const SocialMediaBrand = () => {
               <h2 className="text-3xl md:text-4xl font-semibold text-hero-foreground leading-[1.1] mb-4">Let's Grow Your<br />Social Presence</h2>
               <p className="text-hero-foreground/40 text-sm">Get a custom social media strategy tailored to your brand, audience, and business goals.</p>
             </motion.div>
-            <motion.form initial={{ opacity: 0, y: 20 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true }} className="space-y-4">
+            <motion.form
+              onSubmit={async (e) => {
+                e.preventDefault();
+                const btn = e.currentTarget.querySelector('button');
+                if (btn) btn.disabled = true;
+                const formData = new FormData(e.currentTarget);
+                try {
+                  const res = await fetch("/api/contact", {
+                    method: "POST",
+                    body: formData,
+                  });
+                  if (!res.ok) throw new Error("Failed to submit");
+                  typeof window !== "undefined" && (window as any).gtag && (window as any).gtag('event', 'generate_lead');
+                  import("sonner").then(({ toast }) => {
+                    toast.success("Strategy Requested!", {
+                      description: "We'll be in touch within 24 hours.",
+                    });
+                  });
+                  (e.target as HTMLFormElement).reset();
+                } catch (error) {
+                  import("sonner").then(({ toast }) => {
+                    toast.error("Something went wrong. Please try again later.");
+                  });
+                } finally {
+                  if (btn) btn.disabled = false;
+                }
+              }}
+              initial={{ opacity: 0, y: 20 }}
+              whileInView={{ opacity: 1, y: 0 }}
+              viewport={{ once: true }}
+              className="space-y-4"
+            >
+              <input type="hidden" name="source" value="Social Media Strategy" />
               <div className="grid md:grid-cols-2 gap-4">
-                <input type="text" placeholder="Full Name" className="w-full px-4 py-3 rounded-xl bg-hero-foreground/[0.05] border border-hero-foreground/[0.08] text-hero-foreground placeholder:text-hero-foreground/30 text-sm focus:outline-none focus:border-primary/40" />
-                <input type="email" placeholder="Work Email" className="w-full px-4 py-3 rounded-xl bg-hero-foreground/[0.05] border border-hero-foreground/[0.08] text-hero-foreground placeholder:text-hero-foreground/30 text-sm focus:outline-none focus:border-primary/40" />
+                <input
+                  required
+                  name="name"
+                  type="text"
+                  placeholder="Full Name *"
+                  className="w-full px-4 py-3 rounded-xl bg-hero-foreground/[0.05] border border-hero-foreground/[0.08] text-hero-foreground placeholder:text-hero-foreground/30 text-sm focus:outline-none focus:border-primary/40"
+                />
+                <input
+                  required
+                  name="email"
+                  type="email"
+                  placeholder="Work Email *"
+                  className="w-full px-4 py-3 rounded-xl bg-hero-foreground/[0.05] border border-hero-foreground/[0.08] text-hero-foreground placeholder:text-hero-foreground/30 text-sm focus:outline-none focus:border-primary/40"
+                />
               </div>
               <div className="grid md:grid-cols-2 gap-4">
-                <select className="w-full px-4 py-3 rounded-xl bg-hero-foreground/[0.05] border border-hero-foreground/[0.08] text-hero-foreground/50 text-sm focus:outline-none focus:border-primary/40">
-                  <option value="">Primary Platform</option>
+                <input
+                  required
+                  name="phone"
+                  type="tel"
+                  placeholder="Phone Number *"
+                  className="w-full px-4 py-3 rounded-xl bg-hero-foreground/[0.05] border border-hero-foreground/[0.08] text-hero-foreground placeholder:text-hero-foreground/30 text-sm focus:outline-none focus:border-primary/40"
+                />
+                <input
+                  name="company"
+                  type="text"
+                  placeholder="Company Name"
+                  className="w-full px-4 py-3 rounded-xl bg-hero-foreground/[0.05] border border-hero-foreground/[0.08] text-hero-foreground placeholder:text-hero-foreground/30 text-sm focus:outline-none focus:border-primary/40"
+                />
+              </div>
+              <div className="grid md:grid-cols-2 gap-4">
+                <select
+                  required
+                  name="platform"
+                  className="w-full px-4 py-3 rounded-xl bg-hero-foreground/[0.05] border border-hero-foreground/[0.08] text-hero-foreground/50 text-sm focus:outline-none focus:border-primary/40"
+                >
+                  <option value="">Primary Platform *</option>
                   <option>Instagram</option>
                   <option>LinkedIn</option>
                   <option>TikTok</option>
                   <option>Multiple Platforms</option>
                 </select>
-                <select className="w-full px-4 py-3 rounded-xl bg-hero-foreground/[0.05] border border-hero-foreground/[0.08] text-hero-foreground/50 text-sm focus:outline-none focus:border-primary/40">
-                  <option value="">Current Follower Count</option>
+                <select
+                  required
+                  name="followers"
+                  className="w-full px-4 py-3 rounded-xl bg-hero-foreground/[0.05] border border-hero-foreground/[0.08] text-hero-foreground/50 text-sm focus:outline-none focus:border-primary/40"
+                >
+                  <option value="">Current Follower Count *</option>
                   <option>Under 1,000</option>
                   <option>1,000 – 10,000</option>
                   <option>10,000 – 100,000</option>
                   <option>100,000+</option>
                 </select>
               </div>
-              <button type="submit" className="w-full bg-primary text-primary-foreground py-4 rounded-xl font-semibold hover:bg-primary/90 transition-colors flex items-center justify-center gap-2">
+              <button
+                type="submit"
+                className="w-full bg-primary text-primary-foreground py-4 rounded-xl font-semibold hover:bg-primary/90 transition-colors flex items-center justify-center gap-2 disabled:opacity-70"
+              >
                 Get My Social Strategy <ArrowRight className="w-4 h-4" />
               </button>
             </motion.form>

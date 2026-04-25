@@ -19,7 +19,7 @@ import {
   ArrowRight, CheckCircle, TrendingUp, Zap, ShieldCheck, Search,
   BarChart3, Rocket, FileText, Link2, Code, Bot,
   Globe, Award, Send, Layers, Brain, MessageSquare,
-  ExternalLink, Star, Target, AlertTriangle, ArrowUpRight
+  ExternalLink, Star, Target, AlertTriangle, ArrowUpRight, Loader2
 } from "lucide-react";
 import { toast } from "sonner";
 
@@ -30,9 +30,31 @@ const InlineLeadForm = ({ id, variant = "dark" }: { id: string; variant?: "dark"
   const [step, setStep] = useState(1);
   const [email, setEmail] = useState("");
   const [submitted, setSubmitted] = useState(false);
+  const [isSubmitting, setIsSubmitting] = useState(false);
 
   const handleStep1 = (e: React.FormEvent) => { e.preventDefault(); if (email) setStep(2); };
-  const handleStep2 = (e: React.FormEvent) => { e.preventDefault(); setSubmitted(true); typeof window !== "undefined" && (window as any).gtag && (window as any).gtag('event', 'generate_lead'); toast.success("We'll be in touch within 24 hours!"); };
+  const handleStep2 = async (e: React.FormEvent<HTMLFormElement>) => {
+    e.preventDefault();
+    setIsSubmitting(true);
+    const formData = new FormData(e.currentTarget);
+    formData.append("email", email);
+    formData.append("source", `SEO & AEO - ${id}`);
+
+    try {
+      const res = await fetch("/api/contact", {
+        method: "POST",
+        body: formData,
+      });
+      if (!res.ok) throw new Error();
+      setSubmitted(true);
+      typeof window !== "undefined" && (window as any).gtag && (window as any).gtag('event', 'generate_lead');
+      toast.success("Thank you! We'll be in touch within 24 hours!");
+    } catch (error) {
+      toast.error("Something went wrong. Please try again.");
+    } finally {
+      setIsSubmitting(false);
+    }
+  };
 
   const isDark = variant === "dark";
   const inputCls = isDark ? "bg-white/10 border-white/20 text-white placeholder:text-white/40" : "bg-foreground/5 border-border text-foreground placeholder:text-muted";
@@ -52,24 +74,26 @@ const InlineLeadForm = ({ id, variant = "dark" }: { id: string; variant?: "dark"
       {step === 1 ? (
         <form onSubmit={handleStep1} className="flex flex-col sm:flex-row gap-3">
           <Input type="email" required placeholder="Enter your work email" value={email} onChange={(e) => setEmail(e.target.value)} className={`flex-1 h-12 rounded-full px-5 ${inputCls}`} />
-          <Button asChild className="h-12 rounded-full px-6 bg-primary text-primary-foreground hover:bg-primary/90 font-semibold gap-2 whitespace-nowrap">
-            <a href="https://seo.globify.ae/" target="_blank" rel="noopener noreferrer">Free SEO Audit <ArrowRight className="w-4 h-4" /></a>
+          <Button type="submit" className="h-12 rounded-full px-6 bg-primary text-primary-foreground hover:bg-primary/90 font-semibold gap-2 whitespace-nowrap">
+            Free SEO Audit <ArrowRight className="w-4 h-4" />
           </Button>
         </form>
       ) : (
         <form onSubmit={handleStep2} className="flex flex-col gap-3">
           <p className={`text-xs font-medium ${isDark ? "text-white/60" : "text-muted"}`}>Almost there — tell us a bit more:</p>
-          <Input required placeholder="Your name" className={`h-11 rounded-lg px-4 ${inputCls}`} />
-          <Input required placeholder="Website URL" className={`h-11 rounded-lg px-4 ${inputCls}`} />
-          <select required className={`h-11 rounded-lg px-4 text-sm border ${isDark ? "bg-white/10 border-white/20 text-white" : "bg-foreground/5 border-border text-foreground"}`}>
+          <Input required name="name" placeholder="Your name *" className={`h-11 rounded-lg px-4 ${inputCls}`} />
+          <Input required name="phone" type="tel" placeholder="Phone Number *" className={`h-11 rounded-lg px-4 ${inputCls}`} />
+          <Input required name="website" placeholder="Website URL *" className={`h-11 rounded-lg px-4 ${inputCls}`} />
+          <select name="traffic" required className={`h-11 rounded-lg px-4 text-sm border ${isDark ? "bg-white/10 border-white/20 text-white" : "bg-foreground/5 border-border text-foreground"}`}>
             <option value="">Current monthly organic traffic</option>
             <option>Under 1K visitors</option>
             <option>1K – 10K visitors</option>
             <option>10K – 100K visitors</option>
             <option>100K+ visitors</option>
           </select>
-          <Button type="submit" className="h-11 rounded-lg bg-primary text-primary-foreground hover:bg-primary/90 font-semibold gap-2">
-            Submit <Send className="w-4 h-4" />
+          <Button type="submit" disabled={isSubmitting} className="h-11 rounded-lg bg-primary text-primary-foreground hover:bg-primary/90 font-semibold gap-2">
+            {isSubmitting ? <Loader2 className="w-4 h-4 animate-spin" /> : <Send className="w-4 h-4" />}
+            {isSubmitting ? "Submitting..." : "Submit"}
           </Button>
         </form>
       )}
@@ -289,7 +313,7 @@ const SeoAeo = () => {
               </motion.div>
             ))}
           </motion.div>
-
+ 
           <motion.div initial="hidden" whileInView="visible" viewport={{ once: true }} variants={fadeUp} className="grid md:grid-cols-4 gap-6 mb-14">
             {[
               { metric: "300+", label: "Projects Delivered" },

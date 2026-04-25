@@ -2,9 +2,10 @@
 
 import { useState } from "react";
 import { motion } from "framer-motion";
-import { ArrowRight, CheckCircle2, Send, Code2, Plug, BarChart3, Package, RefreshCw, Shield, Workflow, Cpu } from "lucide-react";
+import { ArrowRight, CheckCircle2, Send, Code2, Plug, BarChart3, Package, RefreshCw, Shield, Workflow, Cpu, Loader2 } from "lucide-react";
 import Navbar from "@/components/Navbar";
 import Footer from "@/components/Footer";
+import { toast } from "sonner";
 
 import CrossLinkSection from "@/components/CrossLinkSection";
 
@@ -38,7 +39,29 @@ const process = [
 
 const ShopifyAppDev = () => {
   const [submitted, setSubmitted] = useState(false);
-  const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => { e.preventDefault(); setSubmitted(true); typeof window !== "undefined" && (window as any).gtag && (window as any).gtag('event', 'generate_lead'); };
+  const [isSubmitting, setIsSubmitting] = useState(false);
+
+  const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
+    e.preventDefault();
+    setIsSubmitting(true);
+    const formData = new FormData(e.currentTarget);
+    try {
+      const res = await fetch("/api/contact", {
+        method: "POST",
+        body: formData,
+      });
+      if (!res.ok) throw new Error("Failed to submit");
+      setSubmitted(true);
+      typeof window !== "undefined" && (window as any).gtag && (window as any).gtag('event', 'generate_lead');
+      toast.success("Proposal Requested!", {
+        description: "Our team will review your requirements and respond within 48 hours.",
+      });
+    } catch (error) {
+      toast.error("Something went wrong. Please try again later.");
+    } finally {
+      setIsSubmitting(false);
+    }
+  };
 
   return (
     <div className="min-h-screen">
@@ -170,16 +193,20 @@ const ShopifyAppDev = () => {
                   <div className="grid grid-cols-2 gap-4">
                     <div>
                       <label className="text-xs font-semibold text-foreground/70 mb-1.5 block">Full Name *</label>
-                      <input required type="text" placeholder="John Doe" className="w-full px-4 py-3 rounded-xl bg-background border border-border text-sm placeholder:text-muted-foreground/40 focus:outline-none focus:border-primary transition-colors" />
+                      <input required name="name" type="text" placeholder="John Doe" className="w-full px-4 py-3 rounded-xl bg-background border border-border text-sm placeholder:text-muted-foreground/40 focus:outline-none focus:border-primary transition-colors" />
                     </div>
                     <div>
                       <label className="text-xs font-semibold text-foreground/70 mb-1.5 block">Email *</label>
-                      <input required type="email" placeholder="john@brand.com" className="w-full px-4 py-3 rounded-xl bg-background border border-border text-sm placeholder:text-muted-foreground/40 focus:outline-none focus:border-primary transition-colors" />
+                      <input required name="email" type="email" placeholder="john@brand.com" className="w-full px-4 py-3 rounded-xl bg-background border border-border text-sm placeholder:text-muted-foreground/40 focus:outline-none focus:border-primary transition-colors" />
                     </div>
                   </div>
                   <div>
+                    <label className="text-xs font-semibold text-foreground/70 mb-1.5 block">Phone Number *</label>
+                    <input required name="phone" type="tel" placeholder="+971 50 000 0000" className="w-full px-4 py-3 rounded-xl bg-background border border-border text-sm placeholder:text-muted-foreground/40 focus:outline-none focus:border-primary transition-colors" />
+                  </div>
+                  <div>
                     <label className="text-xs font-semibold text-foreground/70 mb-1.5 block">App Type *</label>
-                    <select required className="w-full px-4 py-3 rounded-xl bg-background border border-border text-sm focus:outline-none focus:border-primary transition-colors appearance-none">
+                    <select required name="projectType" className="w-full px-4 py-3 rounded-xl bg-background border border-border text-sm focus:outline-none focus:border-primary transition-colors appearance-none">
                       <option value="">Select type</option>
                       <option>Private / Custom App</option>
                       <option>Public App Store App</option>
@@ -190,10 +217,11 @@ const ShopifyAppDev = () => {
                   </div>
                   <div>
                     <label className="text-xs font-semibold text-foreground/70 mb-1.5 block">Describe your app idea *</label>
-                    <textarea required rows={4} placeholder="What problem should this app solve? What systems should it integrate with?" className="w-full px-4 py-3 rounded-xl bg-background border border-border text-sm placeholder:text-muted-foreground/40 focus:outline-none focus:border-primary transition-colors resize-none" />
+                    <textarea required name="message" rows={4} placeholder="What problem should this app solve? What systems should it integrate with?" className="w-full px-4 py-3 rounded-xl bg-background border border-border text-sm placeholder:text-muted-foreground/40 focus:outline-none focus:border-primary transition-colors resize-none" />
                   </div>
-                  <button type="submit" className="w-full flex items-center justify-center gap-2 bg-primary text-primary-foreground px-8 py-4 rounded-full font-semibold text-sm hover:bg-primary/90 transition-all">
-                    <Send className="w-4 h-4" /> Get a Free Technical Proposal
+                  <button type="submit" disabled={isSubmitting} className="w-full flex items-center justify-center gap-2 bg-primary text-primary-foreground px-8 py-4 rounded-full font-semibold text-sm hover:bg-primary/90 transition-all">
+                    {isSubmitting ? <Loader2 className="w-4 h-4 animate-spin" /> : <Send className="w-4 h-4" />}
+                    {isSubmitting ? "Submitting..." : "Get a Free Technical Proposal"}
                   </button>
                   <p className="text-[11px] text-muted-foreground/50 text-center">By submitting, you agree to our Privacy Policy. Response within 48 hours.</p>
                 </form>

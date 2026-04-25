@@ -2,9 +2,10 @@
 
 import { useState } from "react";
 import { motion } from "framer-motion";
-import { ArrowRight, CheckCircle2, Send, Palette, Smartphone, Zap, ShoppingCart, BarChart3, Globe, Layers, Eye } from "lucide-react";
+import { ArrowRight, CheckCircle2, Send, Palette, Smartphone, Zap, ShoppingCart, BarChart3, Globe, Layers, Eye, Loader2 } from "lucide-react";
 import Navbar from "@/components/Navbar";
 import Footer from "@/components/Footer";
+import { toast } from "sonner";
 
 import CrossLinkSection from "@/components/CrossLinkSection";
 
@@ -39,7 +40,31 @@ const results = [
 
 const ShopifyThemes = () => {
   const [submitted, setSubmitted] = useState(false);
-  const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => { e.preventDefault(); setSubmitted(true); typeof window !== "undefined" && (window as any).gtag && (window as any).gtag('event', 'generate_lead'); };
+  const [isSubmitting, setIsSubmitting] = useState(false);
+
+  const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
+    e.preventDefault();
+    setIsSubmitting(true);
+    const formData = new FormData(e.currentTarget);
+    formData.append("source", "Shopify Custom Themes");
+
+    try {
+      const res = await fetch("/api/contact", {
+        method: "POST",
+        body: formData,
+      });
+      if (!res.ok) throw new Error();
+      setSubmitted(true);
+      typeof window !== "undefined" && (window as any).gtag && (window as any).gtag('event', 'generate_lead');
+      toast.success("Quote Requested!", {
+        description: "Our design team will reach out within 24 hours.",
+      });
+    } catch (error) {
+      toast.error("Something went wrong. Please try again.");
+    } finally {
+      setIsSubmitting(false);
+    }
+  };
 
   return (
     <div className="min-h-screen">
@@ -58,94 +83,101 @@ const ShopifyThemes = () => {
                 Your Store Deserves More Than a{" "}
                 <span className="text-transparent bg-clip-text bg-gradient-to-r from-primary to-orange-300">Template</span>
               </h1>
-              <p className="text-hero-foreground/50 text-lg leading-relaxed mb-8 max-w-2xl">
-                Bespoke Shopify storefronts engineered for conversions, not just aesthetics. We design every pixel to turn browsers into buyers and first-timers into loyalists.
+              <p className="text-lg text-hero-foreground/70 leading-relaxed mb-10 max-w-2xl">
+                We design and develop bespoke Shopify storefronts that merge high-end aesthetics with extreme performance. No themes, no shortcuts—just pure conversion power.
               </p>
-              <div className="flex flex-col sm:flex-row gap-4 mb-10">
-                <a href="#lead-capture" className="inline-flex items-center justify-center gap-2 bg-primary text-primary-foreground px-8 py-4 rounded-full font-semibold text-sm hover:bg-primary/90 transition-all hover:gap-3">
-                  Get a Custom Theme Quote <ArrowRight className="w-4 h-4" />
+              <div className="flex flex-col sm:flex-row gap-4">
+                <a href="#lead-capture" className="inline-flex items-center justify-center gap-2 bg-primary text-primary-foreground px-8 py-4 rounded-full font-semibold text-sm hover:bg-primary/90 transition-all">
+                  Request Custom Quote <ArrowRight className="w-4 h-4" />
                 </a>
-                <a href="#lead-capture" className="inline-flex items-center justify-center gap-2 border border-hero-foreground/20 text-hero-foreground/70 px-8 py-4 rounded-full font-semibold text-sm hover:border-primary/40 hover:text-primary transition-all">
-                  See Our Work
+                <a href="#portfolio" className="inline-flex items-center justify-center gap-2 bg-transparent border border-hero-foreground/10 text-hero-foreground px-8 py-4 rounded-full font-semibold text-sm hover:bg-hero-foreground/5 transition-all">
+                  <Eye className="w-4 h-4" /> View Theme Portfolio
                 </a>
-              </div>
-              <div className="flex flex-wrap gap-x-6 gap-y-2">
-                {["Shopify 2.0 Certified", "Mobile-First Design", "Sub-2s Load Times"].map((item) => (
-                  <span key={item} className="flex items-center gap-2 text-xs text-hero-foreground/40"><CheckCircle2 className="w-3.5 h-3.5 text-primary" />{item}</span>
-                ))}
               </div>
             </motion.div>
           </div>
         </div>
       </section>
 
-      {/* Stats */}
-      <section className="bg-section-dark border-y border-section-dark-foreground/[0.06] py-8">
+      {/* Stats Bar */}
+      <section className="py-12 bg-card border-b border-border">
         <div className="container mx-auto px-6">
           <div className="grid grid-cols-2 md:grid-cols-4 gap-8">
-            {stats.map((s, i) => (
-              <motion.div key={s.label} initial={{ opacity: 0, y: 10 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true }} transition={{ delay: i * 0.1 }} className="text-center">
-                <div className="text-2xl md:text-3xl font-bold text-primary">{s.value}</div>
-                <div className="text-xs text-section-dark-foreground/40 mt-1">{s.label}</div>
-              </motion.div>
+            {stats.map((stat) => (
+              <div key={stat.label} className="text-center">
+                <div className="text-3xl font-bold text-foreground mb-1">{stat.value}</div>
+                <div className="text-xs text-muted-foreground uppercase tracking-widest font-semibold">{stat.label}</div>
+              </div>
             ))}
           </div>
         </div>
       </section>
 
-      {/* Why Custom Themes */}
-      <section className="py-24 bg-background">
+      {/* Services Grid */}
+      <section id="services" className="py-24 bg-background">
         <div className="container mx-auto px-6">
-          <motion.div initial={{ opacity: 0, y: 20 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true }} className="text-center mb-16">
-            <p className="text-xs font-bold tracking-[0.3em] uppercase text-primary mb-4">Why Go Custom?</p>
-            <h2 className="text-3xl md:text-4xl font-bold leading-[1.1] mb-4">Templates Cost You Revenue</h2>
-            <p className="text-muted-foreground max-w-xl mx-auto text-sm">Generic themes mean generic conversions. Stores using custom themes see 2–4× higher conversion rates because every element is tailored to their audience.</p>
-          </motion.div>
-          <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-6">
-            {services.map((s, i) => (
-              <motion.div key={s.title} initial={{ opacity: 0, y: 20 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true }} transition={{ delay: i * 0.05 }} className="p-6 rounded-2xl border border-border bg-card hover:border-primary/20 transition-colors group">
-                <s.icon className="w-8 h-8 text-primary mb-4 group-hover:scale-110 transition-transform" />
-                <h3 className="font-semibold text-lg mb-2">{s.title}</h3>
-                <p className="text-sm text-muted-foreground leading-relaxed">{s.desc}</p>
-              </motion.div>
+          <div className="text-center max-w-2xl mx-auto mb-16">
+            <h2 className="text-3xl md:text-4xl font-semibold mb-5">Why Custom Over Templates?</h2>
+            <p className="text-muted-foreground text-sm leading-relaxed">Templates are built for everyone. Our custom themes are built exclusively for your brand, your data, and your specific conversion challenges.</p>
+          </div>
+          <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-8">
+            {services.map((service) => (
+              <div key={service.title} className="p-8 rounded-2xl border border-border bg-card hover:border-primary/20 transition-all group">
+                <div className="w-12 h-12 rounded-xl bg-primary/10 flex items-center justify-center mb-6 text-primary group-hover:scale-110 transition-transform">
+                  <service.icon className="w-6 h-6" />
+                </div>
+                <h3 className="text-lg font-semibold mb-3">{service.title}</h3>
+                <p className="text-muted-foreground text-sm leading-relaxed">{service.desc}</p>
+              </div>
             ))}
+          </div>
+        </div>
+      </section>
+
+      {/* Performance Proof */}
+      <section className="py-24 bg-hero-foreground section-dark relative overflow-hidden">
+        <div className="absolute top-0 left-0 w-full h-1 bg-gradient-to-r from-primary/0 via-primary/50 to-primary/0" />
+        <div className="container mx-auto px-6 relative z-10">
+          <div className="grid lg:grid-cols-2 gap-16 items-center">
+            <div>
+              <h2 className="text-3xl md:text-4xl font-semibold text-white mb-6">Built for Speed,<br />Designed for Results.</h2>
+              <p className="text-white/60 text-sm leading-relaxed mb-10 max-w-lg">We don't just guess what works. We use heatmaps, session recordings, and data analytics to design interfaces that guide users naturally toward the checkout.</p>
+              <div className="grid grid-cols-1 sm:grid-cols-3 gap-6">
+                {results.map((res) => (
+                  <div key={res.label}>
+                    <div className="text-2xl font-bold text-primary mb-1">{res.metric}</div>
+                    <div className="text-[10px] text-white/40 uppercase tracking-wider mb-2">{res.label}</div>
+                    <div className="text-[11px] text-white/70 font-medium">{res.brand}</div>
+                  </div>
+                ))}
+              </div>
+            </div>
+            <div className="relative">
+              <div className="aspect-video rounded-2xl bg-white/5 border border-white/10 flex items-center justify-center p-4">
+                <div className="w-full h-full rounded-lg bg-white/5 animate-pulse" />
+                <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 text-white/20 text-xs font-mono">Theme Performance visualization</div>
+              </div>
+            </div>
           </div>
         </div>
       </section>
 
       {/* Process */}
-      <section className="py-24 bg-section-dark">
-        <div className="container mx-auto px-6">
-          <motion.div initial={{ opacity: 0, y: 20 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true }} className="text-center mb-16">
-            <p className="text-xs font-bold tracking-[0.3em] uppercase text-primary mb-4">Our Process</p>
-            <h2 className="text-3xl md:text-4xl font-bold text-section-dark-foreground leading-[1.1]">From Concept to Conversion in 4 Steps</h2>
-          </motion.div>
-          <div className="grid md:grid-cols-2 lg:grid-cols-4 gap-6 max-w-5xl mx-auto">
-            {process.map((p, i) => (
-              <motion.div key={p.step} initial={{ opacity: 0, y: 20 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true }} transition={{ delay: i * 0.1 }} className="relative p-6 rounded-2xl border border-section-dark-foreground/10 bg-section-dark-foreground/[0.03]">
-                <span className="text-4xl font-bold text-primary/20 mb-3 block">{p.step}</span>
-                <h3 className="font-semibold text-section-dark-foreground mb-2">{p.title}</h3>
-                <p className="text-sm text-section-dark-foreground/50 leading-relaxed">{p.desc}</p>
-              </motion.div>
-            ))}
-          </div>
-        </div>
-      </section>
-
-      {/* Results */}
       <section className="py-24 bg-background">
         <div className="container mx-auto px-6">
-          <motion.div initial={{ opacity: 0, y: 20 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true }} className="text-center mb-16">
-            <p className="text-xs font-bold tracking-[0.3em] uppercase text-primary mb-4">Proven Results</p>
-            <h2 className="text-3xl md:text-4xl font-bold leading-[1.1]">Numbers That Speak Louder Than Pixels</h2>
-          </motion.div>
-          <div className="grid md:grid-cols-3 gap-8 max-w-4xl mx-auto">
-            {results.map((r, i) => (
-              <motion.div key={r.label} initial={{ opacity: 0, y: 20 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true }} transition={{ delay: i * 0.1 }} className="text-center p-8 rounded-2xl border border-border bg-card">
-                <div className="text-4xl font-bold text-primary mb-2">{r.metric}</div>
-                <div className="font-semibold text-sm mb-1">{r.label}</div>
-                <div className="text-xs text-muted-foreground">{r.brand}</div>
-              </motion.div>
+          <div className="text-center max-w-2xl mx-auto mb-16">
+            <h2 className="text-3xl md:text-4xl font-semibold mb-5">The Roadmap to Launch</h2>
+            <p className="text-muted-foreground text-sm leading-relaxed">A structured, data-driven approach to taking your vision from a wireframe to a high-converting Shopify store.</p>
+          </div>
+          <div className="grid md:grid-cols-4 gap-8">
+            {process.map((step) => (
+              <div key={step.step} className="relative group">
+                <div className="text-[5rem] font-black text-foreground/[0.03] absolute -top-8 -left-2 leading-none group-hover:text-primary/[0.05] transition-colors">{step.step}</div>
+                <div className="relative pt-4">
+                  <h3 className="text-lg font-semibold mb-3 text-primary">{step.title}</h3>
+                  <p className="text-muted-foreground text-sm leading-relaxed">{step.desc}</p>
+                </div>
+              </div>
             ))}
           </div>
         </div>
@@ -178,24 +210,34 @@ const ShopifyThemes = () => {
                   <div className="grid grid-cols-2 gap-4">
                     <div>
                       <label className="text-xs font-semibold text-foreground/70 mb-1.5 block">Full Name *</label>
-                      <input required type="text" placeholder="John Doe" className="w-full px-4 py-3 rounded-xl bg-card border border-border text-sm placeholder:text-muted-foreground/40 focus:outline-none focus:border-primary transition-colors" />
+                      <input required name="name" type="text" placeholder="John Doe" className="w-full px-4 py-3 rounded-xl bg-card border border-border text-sm placeholder:text-muted-foreground/40 focus:outline-none focus:border-primary transition-colors" />
                     </div>
                     <div>
                       <label className="text-xs font-semibold text-foreground/70 mb-1.5 block">Email *</label>
-                      <input required type="email" placeholder="john@brand.com" className="w-full px-4 py-3 rounded-xl bg-card border border-border text-sm placeholder:text-muted-foreground/40 focus:outline-none focus:border-primary transition-colors" />
+                      <input required name="email" type="email" placeholder="john@brand.com" className="w-full px-4 py-3 rounded-xl bg-card border border-border text-sm placeholder:text-muted-foreground/40 focus:outline-none focus:border-primary transition-colors" />
+                    </div>
+                  </div>
+                  <div className="grid grid-cols-2 gap-4">
+                    <div>
+                      <label className="text-xs font-semibold text-foreground/70 mb-1.5 block">Phone Number *</label>
+                      <input required name="phone" type="tel" placeholder="+971 50 000 0000" className="w-full px-4 py-3 rounded-xl bg-card border border-border text-sm placeholder:text-muted-foreground/40 focus:outline-none focus:border-primary transition-colors" />
+                    </div>
+                    <div>
+                      <label className="text-xs font-semibold text-foreground/70 mb-1.5 block">Company Name</label>
+                      <input name="company" type="text" placeholder="Your Brand" className="w-full px-4 py-3 rounded-xl bg-card border border-border text-sm placeholder:text-muted-foreground/40 focus:outline-none focus:border-primary transition-colors" />
                     </div>
                   </div>
                   <div>
                     <label className="text-xs font-semibold text-foreground/70 mb-1.5 block">Current Shopify Store URL</label>
-                    <input type="url" placeholder="https://yourstore.myshopify.com" className="w-full px-4 py-3 rounded-xl bg-card border border-border text-sm placeholder:text-muted-foreground/40 focus:outline-none focus:border-primary transition-colors" />
+                    <input name="website" type="url" placeholder="https://yourstore.myshopify.com" className="w-full px-4 py-3 rounded-xl bg-card border border-border text-sm placeholder:text-muted-foreground/40 focus:outline-none focus:border-primary transition-colors" />
                   </div>
                   <div>
                     <label className="text-xs font-semibold text-foreground/70 mb-1.5 block">What's your biggest design challenge?</label>
-                    <textarea rows={3} placeholder="e.g., Low mobile conversions, outdated theme, poor brand consistency..." className="w-full px-4 py-3 rounded-xl bg-card border border-border text-sm placeholder:text-muted-foreground/40 focus:outline-none focus:border-primary transition-colors resize-none" />
+                    <textarea name="message" rows={3} placeholder="e.g., Low mobile conversions, outdated theme, poor brand consistency..." className="w-full px-4 py-3 rounded-xl bg-card border border-border text-sm placeholder:text-muted-foreground/40 focus:outline-none focus:border-primary transition-colors resize-none" />
                   </div>
                   <div>
                     <label className="text-xs font-semibold text-foreground/70 mb-1.5 block">Budget Range</label>
-                    <select className="w-full px-4 py-3 rounded-xl bg-card border border-border text-sm focus:outline-none focus:border-primary transition-colors appearance-none">
+                    <select name="budget" className="w-full px-4 py-3 rounded-xl bg-card border border-border text-sm focus:outline-none focus:border-primary transition-colors appearance-none">
                       <option value="">Select range</option>
                       <option>$5K – $15K</option>
                       <option>$15K – $30K</option>
@@ -203,8 +245,9 @@ const ShopifyThemes = () => {
                       <option>$50K+</option>
                     </select>
                   </div>
-                  <button type="submit" className="w-full flex items-center justify-center gap-2 bg-primary text-primary-foreground px-8 py-4 rounded-full font-semibold text-sm hover:bg-primary/90 transition-all">
-                    <Send className="w-4 h-4" /> Get My Custom Theme Quote
+                  <button type="submit" disabled={isSubmitting} className="w-full flex items-center justify-center gap-2 bg-primary text-primary-foreground px-8 py-4 rounded-full font-semibold text-sm hover:bg-primary/90 transition-all">
+                    {isSubmitting ? <Loader2 className="w-4 h-4 animate-spin" /> : <Send className="w-4 h-4" />}
+                    {isSubmitting ? "Submitting..." : "Get My Custom Theme Quote"}
                   </button>
                   <p className="text-[11px] text-muted-foreground/50 text-center">By submitting, you agree to our Privacy Policy. Response within 24 hours.</p>
                 </form>

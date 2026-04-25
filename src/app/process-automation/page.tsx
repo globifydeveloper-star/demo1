@@ -2,10 +2,11 @@
 
 import { useState } from "react";
 import { motion } from "framer-motion";
-import { ArrowRight, CheckCircle2, Send, Workflow, Cog, FileCheck, RefreshCw, Zap, BarChart3 } from "lucide-react";
+import { ArrowRight, CheckCircle2, Send, Workflow, Cog, FileCheck, RefreshCw, Zap, BarChart3, Loader2 } from "lucide-react";
 import Navbar from "@/components/Navbar";
 import Footer from "@/components/Footer";
 import CrossLinkSection from "@/components/CrossLinkSection";
+import { toast } from "sonner";
 
 
 const stats = [
@@ -40,7 +41,31 @@ const process = [
 
 const ProcessAutomation = () => {
   const [submitted, setSubmitted] = useState(false);
-  const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => { e.preventDefault(); setSubmitted(true); };
+  const [isSubmitting, setIsSubmitting] = useState(false);
+
+  const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
+    e.preventDefault();
+    setIsSubmitting(true);
+    const formData = new FormData(e.currentTarget);
+    formData.append("source", "Process Automation Audit");
+
+    try {
+      const res = await fetch("/api/contact", {
+        method: "POST",
+        body: formData,
+      });
+      if (!res.ok) throw new Error();
+      setSubmitted(true);
+      typeof window !== "undefined" && (window as any).gtag && (window as any).gtag('event', 'generate_lead');
+      toast.success("Audit Requested!", {
+        description: "Our automation team will contact you within 24 hours.",
+      });
+    } catch (error) {
+      toast.error("Something went wrong. Please try again.");
+    } finally {
+      setIsSubmitting(false);
+    }
+  };
 
   return (
     <div className="min-h-screen">
@@ -59,107 +84,108 @@ const ProcessAutomation = () => {
                 Stop Paying People to Do{" "}
                 <span className="text-transparent bg-clip-text bg-gradient-to-r from-primary to-orange-300">What Machines Do Better</span>
               </h1>
-              <p className="text-hero-foreground/50 text-lg leading-relaxed mb-8 max-w-2xl">
-                Intelligent process automation that eliminates manual work, reduces errors to near-zero, and frees your team to focus on growth, not paperwork.
+              <p className="text-lg text-hero-foreground/70 leading-relaxed mb-10 max-w-2xl">
+                We automate manual, repetitive, and paper-based workflows using AI and intelligent orchestration. Save thousands of man-hours and eliminate human error with Globify's automation frameworks.
               </p>
-              <div className="flex flex-col sm:flex-row gap-4 mb-10">
-                <a href="#lead-capture" className="inline-flex items-center justify-center gap-2 bg-primary text-primary-foreground px-8 py-4 rounded-full font-semibold text-sm hover:bg-primary/90 transition-all hover:gap-3">
-                  Get a Free Process Audit <ArrowRight className="w-4 h-4" />
+              <div className="flex flex-col sm:flex-row gap-4">
+                <a href="#lead-capture" className="inline-flex items-center justify-center gap-2 bg-primary text-primary-foreground px-8 py-4 rounded-full font-semibold text-sm hover:bg-primary/90 transition-all">
+                  Get Free Process Audit <ArrowRight className="w-4 h-4" />
                 </a>
-                <a href="#lead-capture" className="inline-flex items-center justify-center gap-2 border border-hero-foreground/20 text-hero-foreground/70 px-8 py-4 rounded-full font-semibold text-sm hover:border-primary/40 hover:text-primary transition-all">
-                  See ROI Calculator
+                <a href="#capabilities" className="inline-flex items-center justify-center gap-2 bg-transparent border border-hero-foreground/10 text-hero-foreground px-8 py-4 rounded-full font-semibold text-sm hover:bg-hero-foreground/5 transition-all">
+                  <Workflow className="w-4 h-4" /> Explore Automation Capabilities
                 </a>
-              </div>
-              <div className="flex flex-wrap gap-x-6 gap-y-2">
-                {["Power Automate & Zapier", "Custom API Integrations", "99.5% Accuracy"].map((item) => (
-                  <span key={item} className="flex items-center gap-2 text-xs text-hero-foreground/40"><CheckCircle2 className="w-3.5 h-3.5 text-primary" />{item}</span>
-                ))}
               </div>
             </motion.div>
           </div>
         </div>
       </section>
 
-      {/* Stats */}
-      <section className="bg-section-dark border-y border-section-dark-foreground/[0.06] py-8">
+      {/* Stats Bar */}
+      <section className="py-12 bg-card border-b border-border">
         <div className="container mx-auto px-6">
           <div className="grid grid-cols-2 md:grid-cols-4 gap-8">
-            {stats.map((s, i) => (
-              <motion.div key={s.label} initial={{ opacity: 0, y: 10 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true }} transition={{ delay: i * 0.1 }} className="text-center">
-                <div className="text-2xl md:text-3xl font-bold text-primary">{s.value}</div>
-                <div className="text-xs text-section-dark-foreground/40 mt-1">{s.label}</div>
-              </motion.div>
+            {stats.map((stat) => (
+              <div key={stat.label} className="text-center">
+                <div className="text-3xl font-bold text-foreground mb-1">{stat.value}</div>
+                <div className="text-xs text-muted-foreground uppercase tracking-widest font-semibold">{stat.label}</div>
+              </div>
             ))}
           </div>
         </div>
       </section>
 
-      {/* Capabilities */}
-      <section className="py-24 bg-background">
+      {/* Capabilities Grid */}
+      <section id="capabilities" className="py-24 bg-background">
         <div className="container mx-auto px-6">
-          <motion.div initial={{ opacity: 0, y: 20 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true }} className="text-center mb-16">
-            <p className="text-xs font-bold tracking-[0.3em] uppercase text-primary mb-4">What We Automate</p>
-            <h2 className="text-3xl md:text-4xl font-bold leading-[1.1] mb-4">Every Manual Process Is a Cost You Can Eliminate</h2>
-            <p className="text-muted-foreground max-w-xl mx-auto text-sm">From simple task automation to complex multi-system orchestration, we build workflows that run flawlessly at any scale.</p>
-          </motion.div>
-          <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-6">
-            {capabilities.map((s, i) => (
-              <motion.div key={s.title} initial={{ opacity: 0, y: 20 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true }} transition={{ delay: i * 0.05 }} className="p-6 rounded-2xl border border-border bg-card hover:border-primary/20 transition-colors group">
-                <s.icon className="w-8 h-8 text-primary mb-4 group-hover:scale-110 transition-transform" />
-                <h3 className="font-semibold text-lg mb-2">{s.title}</h3>
-                <p className="text-sm text-muted-foreground leading-relaxed">{s.desc}</p>
-              </motion.div>
+          <div className="text-center max-w-2xl mx-auto mb-16">
+            <h2 className="text-3xl md:text-4xl font-semibold mb-5">Automation Solutions</h2>
+            <p className="text-muted-foreground text-sm leading-relaxed">From simple task automation to complex cross-departmental orchestrations, we help you build a more efficient business.</p>
+          </div>
+          <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-8">
+            {capabilities.map((item) => (
+              <div key={item.title} className="p-8 rounded-2xl border border-border bg-card hover:border-primary/20 transition-all group">
+                <div className="w-12 h-12 rounded-xl bg-primary/10 flex items-center justify-center mb-6 text-primary group-hover:scale-110 transition-transform">
+                  <item.icon className="w-6 h-6" />
+                </div>
+                <h3 className="text-lg font-semibold mb-3">{item.title}</h3>
+                <p className="text-muted-foreground text-sm leading-relaxed">{item.desc}</p>
+              </div>
             ))}
           </div>
         </div>
       </section>
 
-      {/* ROI Table */}
-      <section className="py-24 bg-section-dark">
+      {/* ROI Case Study */}
+      <section className="py-24 bg-card border-y border-border">
         <div className="container mx-auto px-6">
-          <motion.div initial={{ opacity: 0, y: 20 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true }} className="text-center mb-16">
-            <p className="text-xs font-bold tracking-[0.3em] uppercase text-primary mb-4">ROI Impact</p>
-            <h2 className="text-3xl md:text-4xl font-bold text-section-dark-foreground leading-[1.1]">Before vs After Automation</h2>
-          </motion.div>
-          <div className="max-w-4xl mx-auto overflow-x-auto">
-            <table className="w-full text-sm">
-              <thead>
-                <tr className="border-b border-section-dark-foreground/10">
-                  <th className="text-left py-4 px-4 text-section-dark-foreground/60 font-medium">Task</th>
-                  <th className="text-center py-4 px-4 text-section-dark-foreground/60 font-medium">Before</th>
-                  <th className="text-center py-4 px-4 text-section-dark-foreground/60 font-medium">After</th>
-                  <th className="text-center py-4 px-4 text-primary font-semibold">Impact</th>
-                </tr>
-              </thead>
-              <tbody>
-                {savings.map((row) => (
-                  <tr key={row.task} className="border-b border-section-dark-foreground/5">
-                    <td className="py-3 px-4 text-section-dark-foreground/80 font-medium">{row.task}</td>
-                    <td className="py-3 px-4 text-center text-section-dark-foreground/50">{row.before}</td>
-                    <td className="py-3 px-4 text-center text-section-dark-foreground/90">{row.after}</td>
-                    <td className="py-3 px-4 text-center text-primary font-semibold">{row.saving}</td>
-                  </tr>
+          <div className="max-w-5xl mx-auto grid lg:grid-cols-2 gap-16 items-center">
+            <div>
+              <h2 className="text-3xl md:text-4xl font-semibold mb-6">The Real Impact of Automation</h2>
+              <p className="text-muted-foreground text-sm leading-relaxed mb-10 max-w-lg">We measure success in hours saved and accuracy gained. Here is what we've achieved for our enterprise clients in the last 12 months.</p>
+              <div className="space-y-6">
+                {savings.map((item) => (
+                  <div key={item.task} className="p-5 rounded-xl border border-border bg-background">
+                    <div className="flex justify-between items-center mb-3">
+                      <div className="font-semibold text-sm">{item.task}</div>
+                      <div className="text-xs font-bold text-primary uppercase">{item.saving}</div>
+                    </div>
+                    <div className="flex items-center gap-4 text-xs">
+                      <div className="text-muted-foreground line-through">{item.before}</div>
+                      <ArrowRight className="w-3 h-3 text-muted-foreground/30" />
+                      <div className="text-foreground font-semibold px-2 py-1 bg-primary/5 rounded">{item.after}</div>
+                    </div>
+                  </div>
                 ))}
-              </tbody>
-            </table>
+              </div>
+            </div>
+            <div className="relative">
+              <div className="aspect-square rounded-3xl bg-primary/5 border border-primary/10 p-12 flex flex-col justify-center">
+                <div className="text-5xl font-black text-primary mb-2">12,000+</div>
+                <div className="text-xl font-semibold text-foreground mb-4">Hours Saved Annually</div>
+                <p className="text-muted-foreground text-sm leading-relaxed">Average man-hours saved by our clients across their logistics and finance operations within 6 months of automation deployment.</p>
+              </div>
+              <div className="absolute -bottom-6 -right-6 w-32 h-32 bg-primary/10 rounded-full blur-[50px] pointer-events-none" />
+            </div>
           </div>
         </div>
       </section>
 
-      {/* Process */}
+      {/* Roadmap */}
       <section className="py-24 bg-background">
         <div className="container mx-auto px-6">
-          <motion.div initial={{ opacity: 0, y: 20 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true }} className="text-center mb-16">
-            <p className="text-xs font-bold tracking-[0.3em] uppercase text-primary mb-4">How We Work</p>
-            <h2 className="text-3xl md:text-4xl font-bold leading-[1.1]">Automation That Pays for Itself in Weeks</h2>
-          </motion.div>
-          <div className="grid md:grid-cols-2 lg:grid-cols-4 gap-6 max-w-5xl mx-auto">
-            {process.map((p, i) => (
-              <motion.div key={p.step} initial={{ opacity: 0, y: 20 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true }} transition={{ delay: i * 0.1 }} className="p-6 rounded-2xl border border-border bg-card">
-                <span className="text-4xl font-bold text-primary/20 mb-3 block">{p.step}</span>
-                <h3 className="font-semibold mb-2">{p.title}</h3>
-                <p className="text-sm text-muted-foreground leading-relaxed">{p.desc}</p>
-              </motion.div>
+          <div className="text-center max-w-2xl mx-auto mb-16">
+            <h2 className="text-3xl md:text-4xl font-semibold mb-5">Your Automation Roadmap</h2>
+            <p className="text-muted-foreground text-sm leading-relaxed">A clear, phased approach to transitioning your business from manual chaos to automated efficiency.</p>
+          </div>
+          <div className="grid md:grid-cols-4 gap-8">
+            {process.map((step) => (
+              <div key={step.step} className="relative group">
+                <div className="text-[5rem] font-black text-foreground/[0.03] absolute -top-8 -left-2 leading-none group-hover:text-primary/[0.05] transition-colors">{step.step}</div>
+                <div className="relative pt-4">
+                  <h3 className="text-lg font-semibold mb-3 text-primary">{step.title}</h3>
+                  <p className="text-muted-foreground text-sm leading-relaxed">{step.desc}</p>
+                </div>
+              </div>
             ))}
           </div>
         </div>
@@ -189,12 +215,19 @@ const ProcessAutomation = () => {
               ) : (
                 <form onSubmit={handleSubmit} className="p-8 rounded-2xl border border-border bg-background space-y-5">
                   <div className="grid grid-cols-2 gap-4">
-                    <div><label className="text-xs font-semibold text-foreground/70 mb-1.5 block">Full Name *</label><input required type="text" placeholder="John Doe" className="w-full px-4 py-3 rounded-xl bg-card border border-border text-sm placeholder:text-muted-foreground/40 focus:outline-none focus:border-primary transition-colors" /></div>
-                    <div><label className="text-xs font-semibold text-foreground/70 mb-1.5 block">Email *</label><input required type="email" placeholder="john@company.com" className="w-full px-4 py-3 rounded-xl bg-card border border-border text-sm placeholder:text-muted-foreground/40 focus:outline-none focus:border-primary transition-colors" /></div>
+                    <div><label className="text-xs font-semibold text-foreground/70 mb-1.5 block">Full Name *</label><input required name="name" type="text" placeholder="John Doe" className="w-full px-4 py-3 rounded-xl bg-card border border-border text-sm placeholder:text-muted-foreground/40 focus:outline-none focus:border-primary transition-colors" /></div>
+                    <div><label className="text-xs font-semibold text-foreground/70 mb-1.5 block">Email *</label><input required name="email" type="email" placeholder="john@company.com" className="w-full px-4 py-3 rounded-xl bg-card border border-border text-sm placeholder:text-muted-foreground/40 focus:outline-none focus:border-primary transition-colors" /></div>
                   </div>
-                  <div><label className="text-xs font-semibold text-foreground/70 mb-1.5 block">Which processes need automation? *</label><textarea required rows={3} placeholder="e.g., Invoice processing, order management, employee onboarding..." className="w-full px-4 py-3 rounded-xl bg-card border border-border text-sm placeholder:text-muted-foreground/40 focus:outline-none focus:border-primary transition-colors resize-none" /></div>
-                  <div><label className="text-xs font-semibold text-foreground/70 mb-1.5 block">Current Tools</label><input type="text" placeholder="e.g., Zoho, SAP, Microsoft 365, Shopify..." className="w-full px-4 py-3 rounded-xl bg-card border border-border text-sm placeholder:text-muted-foreground/40 focus:outline-none focus:border-primary transition-colors" /></div>
-                  <button type="submit" className="w-full flex items-center justify-center gap-2 bg-primary text-primary-foreground px-8 py-4 rounded-full font-semibold text-sm hover:bg-primary/90 transition-all"><Send className="w-4 h-4" /> Get Your Free Process Audit</button>
+                  <div className="grid grid-cols-2 gap-4">
+                    <div><label className="text-xs font-semibold text-foreground/70 mb-1.5 block">Phone Number *</label><input required name="phone" type="tel" placeholder="+971 50 000 0000" className="w-full px-4 py-3 rounded-xl bg-card border border-border text-sm placeholder:text-muted-foreground/40 focus:outline-none focus:border-primary transition-colors" /></div>
+                    <div><label className="text-xs font-semibold text-foreground/70 mb-1.5 block">Company</label><input name="company" type="text" placeholder="Your Brand" className="w-full px-4 py-3 rounded-xl bg-card border border-border text-sm placeholder:text-muted-foreground/40 focus:outline-none focus:border-primary transition-colors" /></div>
+                  </div>
+                  <div><label className="text-xs font-semibold text-foreground/70 mb-1.5 block">Which processes need automation? *</label><textarea required name="message" rows={3} placeholder="e.g., Invoice processing, order management, employee onboarding..." className="w-full px-4 py-3 rounded-xl bg-card border border-border text-sm placeholder:text-muted-foreground/40 focus:outline-none focus:border-primary transition-colors resize-none" /></div>
+                  <div><label className="text-xs font-semibold text-foreground/70 mb-1.5 block">Current Tools</label><input name="website" type="text" placeholder="e.g., Zoho, SAP, Microsoft 365, Shopify..." className="w-full px-4 py-3 rounded-xl bg-card border border-border text-sm placeholder:text-muted-foreground/40 focus:outline-none focus:border-primary transition-colors" /></div>
+                  <button type="submit" disabled={isSubmitting} className="w-full flex items-center justify-center gap-2 bg-primary text-primary-foreground px-8 py-4 rounded-full font-semibold text-sm hover:bg-primary/90 transition-all">
+                    {isSubmitting ? <Loader2 className="w-4 h-4 animate-spin" /> : <Send className="w-4 h-4" />}
+                    {isSubmitting ? "Submitting..." : "Get Your Free Process Audit"}
+                  </button>
                   <p className="text-[11px] text-muted-foreground/50 text-center">By submitting, you agree to our Privacy Policy. Response within 24 hours.</p>
                 </form>
               )}

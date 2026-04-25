@@ -130,14 +130,25 @@ const AIAutoLeadCapture = () => {
                     className="col-span-1 bg-hero-foreground/[0.04] border border-hero-foreground/[0.08] rounded-xl px-4 py-3 text-sm text-hero-foreground placeholder:text-hero-foreground/25 focus:outline-none focus:border-primary/40"
                   />
                 </div>
-                <input
-                  id="company"
-                  name="company"
-                  type="text"
-                  placeholder="Company Name"
-                  maxLength={100}
-                  className="w-full bg-hero-foreground/[0.04] border border-hero-foreground/[0.08] rounded-xl px-4 py-3 text-sm text-hero-foreground placeholder:text-hero-foreground/25 focus:outline-none focus:border-primary/40"
-                />
+                <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                  <input
+                    id="phone"
+                    name="phone"
+                    type="tel"
+                    placeholder="Phone Number *"
+                    required
+                    maxLength={20}
+                    className="col-span-1 bg-hero-foreground/[0.04] border border-hero-foreground/[0.08] rounded-xl px-4 py-3 text-sm text-hero-foreground placeholder:text-hero-foreground/25 focus:outline-none focus:border-primary/40"
+                  />
+                  <input
+                    id="company"
+                    name="company"
+                    type="text"
+                    placeholder="Company Name"
+                    maxLength={100}
+                    className="col-span-1 bg-hero-foreground/[0.04] border border-hero-foreground/[0.08] rounded-xl px-4 py-3 text-sm text-hero-foreground placeholder:text-hero-foreground/25 focus:outline-none focus:border-primary/40"
+                  />
+                </div>
                 <SelectWithChevron id="industry" name="industry" required>
                   <option value="">Industry *</option>
                   <option>E-Commerce & Retail</option>

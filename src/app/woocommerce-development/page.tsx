@@ -20,7 +20,7 @@ import {
   ArrowRight, CheckCircle, TrendingUp, Zap, ShieldCheck, Clock, Star,
   BarChart3, Rocket, RefreshCw, ShoppingCart, Palette, Settings, Layers,
   Globe, HeadphonesIcon, Award, Users, ChevronRight, MessageCircle, Phone,
-  Target, AlertTriangle, ArrowUpRight, Send, Code2, Database, Plug, Search
+  Target, AlertTriangle, ArrowUpRight, Send, Code2, Database, Plug, Search, Loader2
 } from "lucide-react";
 import { toast } from "sonner";
 import WooPricingPackages from "@/components/woocommerce/WooPricingPackages";
@@ -30,14 +30,33 @@ const InlineLeadForm = ({ id, variant = "dark" }: { id: string; variant?: "dark"
   const [step, setStep] = useState(1);
   const [email, setEmail] = useState("");
   const [submitted, setSubmitted] = useState(false);
+  const [isSubmitting, setIsSubmitting] = useState(false);
 
   const handleStep1 = (e: React.FormEvent) => {
     e.preventDefault();
     if (email) setStep(2);
   };
-  const handleStep2 = (e: React.FormEvent) => {
+  const handleStep2 = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
-    setSubmitted(true); typeof window !== "undefined" && (window as any).gtag && (window as any).gtag('event', 'generate_lead'); toast.success("We'll be in touch within 24 hours!");
+    setIsSubmitting(true);
+    const formData = new FormData(e.currentTarget);
+    formData.append("email", email);
+    formData.append("source", `WooCommerce Development - ${id}`);
+
+    try {
+      const res = await fetch("/api/contact", {
+        method: "POST",
+        body: formData,
+      });
+      if (!res.ok) throw new Error();
+      setSubmitted(true);
+      typeof window !== "undefined" && (window as any).gtag && (window as any).gtag('event', 'generate_lead');
+      toast.success("Thank you! We'll be in touch within 24 hours!");
+    } catch (error) {
+      toast.error("Something went wrong. Please try again.");
+    } finally {
+      setIsSubmitting(false);
+    }
   };
 
   const isDark = variant === "dark";
@@ -71,17 +90,19 @@ const InlineLeadForm = ({ id, variant = "dark" }: { id: string; variant?: "dark"
       ) : (
         <form onSubmit={handleStep2} className="flex flex-col gap-3">
           <p className={`text-xs font-medium ${isDark ? "text-white/60" : "text-muted"}`}>Almost there — tell us a bit more:</p>
-          <Input required placeholder="Your name" className={`h-11 rounded-lg px-4 ${inputCls}`} />
-          <Input placeholder="Company / Brand name" className={`h-11 rounded-lg px-4 ${inputCls}`} />
-          <select required className={`h-11 rounded-lg px-4 text-sm border ${isDark ? "bg-white/10 border-white/20 text-white" : "bg-foreground/5 border-border text-foreground"}`}>
+          <Input required name="name" placeholder="Your name *" className={`h-11 rounded-lg px-4 ${inputCls}`} />
+          <Input required name="phone" type="tel" placeholder="Phone Number *" className={`h-11 rounded-lg px-4 ${inputCls}`} />
+          <Input name="company" placeholder="Company / Brand name" className={`h-11 rounded-lg px-4 ${inputCls}`} />
+          <select name="revenue" required className={`h-11 rounded-lg px-4 text-sm border ${isDark ? "bg-white/10 border-white/20 text-white" : "bg-foreground/5 border-border text-foreground"}`}>
             <option value="">Monthly revenue range</option>
             <option>Under $10K</option>
             <option>$10K – $50K</option>
             <option>$50K – $250K</option>
             <option>$250K+</option>
           </select>
-          <Button type="submit" className="h-11 rounded-full bg-primary text-primary-foreground hover:bg-primary/90 font-semibold gap-2">
-            Get My Free Growth Plan <Send className="w-4 h-4" />
+          <Button type="submit" disabled={isSubmitting} className="h-11 rounded-full bg-primary text-primary-foreground hover:bg-primary/90 font-semibold gap-2">
+            {isSubmitting ? <Loader2 className="w-4 h-4 animate-spin" /> : <Send className="w-4 h-4" />}
+            {isSubmitting ? "Submitting..." : "Get My Free Growth Plan"}
           </Button>
         </form>
       )}

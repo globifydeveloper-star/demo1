@@ -13,6 +13,7 @@ import Footer from "@/components/Footer";
 
 import CrossLinkSection from "@/components/CrossLinkSection";
 import Link from 'next/link';
+import { toast } from "sonner";
 
 import { useContactDialog } from "@/contexts/ContactDialogContext";
 import ProcessSection from "@/components/ProcessSection";
@@ -739,17 +740,40 @@ const ServicesPage = () => {
 
             {/* Lead Form */}
             <form
-              onSubmit={(e) => e.preventDefault()}
-              className="flex flex-col sm:flex-row gap-3 max-w-lg mx-auto mb-6"
+              onSubmit={async (e) => {
+                e.preventDefault();
+                const form = e.currentTarget;
+                const formData = new FormData(form);
+                try {
+                  const res = await fetch("/api/contact", { method: "POST", body: formData });
+                  if (!res.ok) throw new Error();
+                  toast.success("Request Submitted!", { description: "We'll get back to you within 24 hours." });
+                  form.reset();
+                } catch {
+                  toast.error("Something went wrong. Please try again.");
+                }
+              }}
+              className="space-y-3 max-w-lg mx-auto mb-6"
             >
-              <input
-                type="email"
-                placeholder="Enter your email"
-                className="flex-1 px-5 py-3.5 rounded-full bg-white/[0.06] border border-white/10 text-white placeholder:text-white/30 text-sm focus:outline-none focus:border-primary/50 transition-colors"
-              />
+              <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
+                <input
+                  required
+                  name="email"
+                  type="email"
+                  placeholder="Work Email *"
+                  className="w-full px-5 py-3.5 rounded-full bg-white/[0.06] border border-white/10 text-white placeholder:text-white/30 text-sm focus:outline-none focus:border-primary/50 transition-colors"
+                />
+                <input
+                  required
+                  name="phone"
+                  type="tel"
+                  placeholder="Phone Number *"
+                  className="w-full px-5 py-3.5 rounded-full bg-white/[0.06] border border-white/10 text-white placeholder:text-white/30 text-sm focus:outline-none focus:border-primary/50 transition-colors"
+                />
+              </div>
               <button
                 type="submit"
-                className="inline-flex items-center justify-center gap-2 bg-primary text-primary-foreground px-7 py-3.5 rounded-full font-semibold text-sm hover:bg-primary/90 transition-all hover:gap-3 flex-shrink-0"
+                className="w-full inline-flex items-center justify-center gap-2 bg-primary text-primary-foreground px-7 py-3.5 rounded-full font-semibold text-sm hover:bg-primary/90 transition-all hover:gap-3"
               >
                 Get a Free Quote
                 <Send className="w-4 h-4" />

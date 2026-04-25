@@ -712,10 +712,7 @@ const HireDevelopers = () => {
             >
               <div className="grid sm:grid-cols-2 gap-5">
                 <div>
-                  <label
-                    htmlFor="hire-name"
-                    className="block text-sm font-medium text-section-dark-foreground/80 mb-1.5"
-                  >
+                  <label htmlFor="hire-name" className="block text-sm font-medium text-section-dark-foreground/80 mb-1.5">
                     Full Name *
                   </label>
                   <input
@@ -728,10 +725,7 @@ const HireDevelopers = () => {
                   />
                 </div>
                 <div>
-                  <label
-                    htmlFor="hire-email"
-                    className="block text-sm font-medium text-section-dark-foreground/80 mb-1.5"
-                  >
+                  <label htmlFor="hire-email" className="block text-sm font-medium text-section-dark-foreground/80 mb-1.5">
                     Work Email *
                   </label>
                   <input
@@ -742,6 +736,34 @@ const HireDevelopers = () => {
                     maxLength={255}
                     className="w-full px-4 py-2.5 rounded-lg bg-section-dark-foreground/[0.06] border border-section-dark-foreground/10 text-section-dark-foreground placeholder:text-section-dark-foreground/30 focus:border-primary focus:outline-none text-sm"
                     placeholder="john@company.com"
+                  />
+                </div>
+              </div>
+              <div className="grid sm:grid-cols-2 gap-5">
+                <div>
+                  <label htmlFor="hire-phone" className="block text-sm font-medium text-section-dark-foreground/80 mb-1.5">
+                    Phone Number *
+                  </label>
+                  <input
+                    id="hire-phone"
+                    name="phone"
+                    required
+                    type="tel"
+                    maxLength={20}
+                    className="w-full px-4 py-2.5 rounded-lg bg-section-dark-foreground/[0.06] border border-section-dark-foreground/10 text-section-dark-foreground placeholder:text-section-dark-foreground/30 focus:border-primary focus:outline-none text-sm"
+                    placeholder="+971 50 000 0000"
+                  />
+                </div>
+                <div>
+                  <label htmlFor="hire-company" className="block text-sm font-medium text-section-dark-foreground/80 mb-1.5">
+                    Company / Brand
+                  </label>
+                  <input
+                    id="hire-company"
+                    name="company"
+                    maxLength={100}
+                    className="w-full px-4 py-2.5 rounded-lg bg-section-dark-foreground/[0.06] border border-section-dark-foreground/10 text-section-dark-foreground placeholder:text-section-dark-foreground/30 focus:border-primary focus:outline-none text-sm"
+                    placeholder="Your Brand"
                   />
                 </div>
               </div>
