@@ -34,6 +34,7 @@ const comparison = [
 ];
 
 const PaidAdvertising = () => {
+  const router = useRouter();
   return (
     <div className="min-h-screen">
       

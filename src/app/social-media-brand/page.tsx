@@ -34,6 +34,7 @@ const platforms = [
 ];
 
 const SocialMediaBrand = () => {
+  const router = useRouter();
   return (
     <div className="min-h-screen">
       

@@ -166,6 +166,7 @@ const faqs = [
 ];
 
 const ServiceFAQ = () => {
+  const router = useRouter();
   const [openIndex, setOpenIndex] = useState<number | null>(null);
   return (
     <div className="space-y-4">
@@ -201,6 +202,7 @@ const ServiceFAQ = () => {
 };
 
 const ServicesPage = () => {
+  const router = useRouter();
   const { openContactDialog } = useContactDialog();
   return (
     <div className="min-h-screen">
