@@ -44,6 +44,7 @@ import CaseStudiesSection from "@/components/CaseStudiesSection";
 import TestimonialsSection from "@/components/TestimonialsSection";
 
 import servicesHero from "@/assets/services-hero.jpg";
+import { useRouter } from "next/navigation";
 
 const services = [
   {
@@ -748,6 +749,7 @@ const ServicesPage = () => {
                   const res = await fetch("/api/contact", { method: "POST", body: formData });
                   if (!res.ok) throw new Error();
                   toast.success("Request Submitted!", { description: "We'll get back to you within 24 hours." });
+    router.push("/thank-you");
                   form.reset();
                 } catch {
                   toast.error("Something went wrong. Please try again.");

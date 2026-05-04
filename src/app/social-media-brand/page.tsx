@@ -6,6 +6,7 @@ import CrossLinkSection from "@/components/CrossLinkSection";
 
 import { motion } from "framer-motion";
 import { ArrowRight, Share2, Heart, Users, Camera, MessageCircle, TrendingUp } from "lucide-react";
+import { useRouter } from "next/navigation";
 
 const stats = [
   { value: "10x", label: "Engagement Increase" },
@@ -138,6 +139,7 @@ const SocialMediaBrand = () => {
                     toast.success("Strategy Requested!", {
                       description: "We'll be in touch within 24 hours.",
                     });
+    router.push("/thank-you");
                   });
                   (e.target as HTMLFormElement).reset();
                 } catch (error) {

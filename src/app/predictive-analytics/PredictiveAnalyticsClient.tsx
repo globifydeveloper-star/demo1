@@ -7,6 +7,7 @@ import Navbar from "@/components/Navbar";
 import Footer from "@/components/Footer";
 import CrossLinkSection from "@/components/CrossLinkSection";
 import { toast } from "sonner";
+import { useRouter } from "next/navigation";
 
 
 const stats = [
@@ -39,6 +40,7 @@ const process = [
 ];
 
 const PredictiveAnalytics = () => {
+  const router = useRouter();
   const [submitted, setSubmitted] = useState(false);
   const [isSubmitting, setIsSubmitting] = useState(false);
 
@@ -59,6 +61,7 @@ const PredictiveAnalytics = () => {
       toast.success("Strategy Requested!", {
         description: "Our data science team will contact you within 24 hours.",
       });
+    router.push("/thank-you");
     } catch (error) {
       toast.error("Something went wrong. Please try again.");
     } finally {

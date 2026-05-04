@@ -24,8 +24,10 @@ import {
 } from "lucide-react";
 import { toast } from "sonner";
 import shopifyLogo from "@/assets/shopify-logo.png";
+import { useRouter } from "next/navigation";
 
 const InlineLeadForm = ({ id, variant = "dark" }: { id: string; variant?: "dark" | "light" }) => {
+  const router = useRouter();
   const [step, setStep] = useState(1);
   const [email, setEmail] = useState("");
   const [submitted, setSubmitted] = useState(false);
@@ -45,6 +47,7 @@ const InlineLeadForm = ({ id, variant = "dark" }: { id: string; variant?: "dark"
       setSubmitted(true);
       typeof window !== "undefined" && (window as any).gtag && (window as any).gtag('event', 'generate_lead');
       toast.success("We'll be in touch within 24 hours!");
+    router.push("/thank-you");
     } catch {
       toast.error("Something went wrong. Please try again.");
     } finally {

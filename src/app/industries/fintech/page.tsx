@@ -7,6 +7,7 @@ import { ArrowRight, CheckCircle2, Send, Shield, Brain, Smartphone, BarChart3, U
 import Navbar from "@/components/Navbar";
 import Footer from "@/components/Footer";
 import { toast } from "sonner";
+import { useRouter } from "next/navigation";
 
 
 const stats = [
@@ -35,6 +36,7 @@ const whyGlobify = [
 ];
 
 const IndustryFintech = () => {
+  const router = useRouter();
   const [submitted, setSubmitted] = useState(false);
   const [isSubmitting, setIsSubmitting] = useState(false);
 
@@ -53,6 +55,7 @@ const IndustryFintech = () => {
       toast.success("Consultation Requested!", {
         description: "Our fintech team will respond within 24 hours.",
       });
+    router.push("/thank-you");
     } catch (error) {
       toast.error("Something went wrong. Please try again later.");
     } finally {

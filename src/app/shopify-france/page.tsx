@@ -22,8 +22,10 @@ import {
   Send, Lock, CreditCard, Truck, Languages, Receipt, Loader2
 } from "lucide-react";
 import { toast } from "sonner";
+import { useRouter } from "next/navigation";
 
 const InlineLeadForm = ({ id, variant = "dark" }: { id: string; variant?: "dark" | "light" }) => {
+  const router = useRouter();
   const [step, setStep] = useState(1);
   const [email, setEmail] = useState("");
   const [submitted, setSubmitted] = useState(false);
@@ -43,6 +45,7 @@ const InlineLeadForm = ({ id, variant = "dark" }: { id: string; variant?: "dark"
       setSubmitted(true);
       typeof window !== "undefined" && (window as any).gtag && (window as any).gtag('event', 'generate_lead');
       toast.success("Merci ! Nous vous recontacterons sous peu.");
+    router.push("/thank-you");
     } catch {
       toast.error("Un problème est survenu. Veuillez réessayer.");
     } finally {

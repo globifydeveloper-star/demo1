@@ -8,6 +8,7 @@ import Footer from "@/components/Footer";
 import { toast } from "sonner";
 
 import CrossLinkSection from "@/components/CrossLinkSection";
+import { useRouter } from "next/navigation";
 
 const stats = [
   { value: "$500M+", label: "GMV Managed" },
@@ -42,6 +43,7 @@ const process = [
 ];
 
 const ShopifyPlus = () => {
+  const router = useRouter();
   const [submitted, setSubmitted] = useState(false);
   const [isSubmitting, setIsSubmitting] = useState(false);
 
@@ -62,6 +64,7 @@ const ShopifyPlus = () => {
       toast.success("Consultation Requested!", {
         description: "An enterprise consultant will reach out within 24 hours.",
       });
+    router.push("/thank-you");
     } catch (error) {
       toast.error("Something went wrong. Please try again.");
     } finally {

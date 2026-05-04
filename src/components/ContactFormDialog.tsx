@@ -14,6 +14,7 @@ import { Textarea } from "@/components/ui/textarea";
 import { Label } from "@/components/ui/label";
 import { Send, Loader2 } from "lucide-react";
 import { toast } from "sonner";
+import { useRouter } from "next/navigation";
 
 interface ContactFormDialogProps {
   open: boolean;
@@ -56,6 +57,7 @@ const ContactFormDialog = ({
   onOpenChange,
   selectedPlan,
 }: ContactFormDialogProps) => {
+  const router = useRouter();
   const [isSubmitting, setIsSubmitting] = useState(false);
 
   const handleClose = (val: boolean) => {
@@ -82,6 +84,7 @@ const ContactFormDialog = ({
       toast.success("Thank you for reaching out!", {
         description: "We'll get back to you within 24 hours.",
       });
+    router.push("/thank-you");
       handleClose(false);
     } catch (error) {
       toast.error("Something went wrong. Please try again later.");

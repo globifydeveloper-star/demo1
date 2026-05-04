@@ -42,6 +42,7 @@ import MobileFloatingCTA from "@/components/MobileFloatingCTA";
 import ClientsSection from "@/components/ClientsSection";
 import CrossLinkSection from "@/components/CrossLinkSection";
 import { useContactDialog } from "@/contexts/ContactDialogContext";
+import { useRouter } from "next/navigation";
 
 /* ── Developer Categories (updated per user request) ── */
 const developerTypes = [
@@ -295,6 +296,7 @@ const faq = [
 const HireDevelopers = () => {
   const { openContactDialog } = useContactDialog();
   const [openFaq, setOpenFaq] = useState<number | null>(null);
+  const router = useRouter();
   const [isSubmitting, setIsSubmitting] = useState(false);
 
   const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
@@ -311,6 +313,7 @@ const HireDevelopers = () => {
         description:
           "We'll get back to you with developer profiles within 24 hours.",
       });
+    router.push("/thank-you");
       (e.target as HTMLFormElement).reset();
     } catch (error) {
       toast.error("Something went wrong. Please try again later.");

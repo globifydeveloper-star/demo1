@@ -23,9 +23,11 @@ import {
 } from "lucide-react";
 import { toast } from "sonner";
 import MagentoPricingPackages from "@/components/magento/MagentoPricingPackages";
+import { useRouter } from "next/navigation";
 
 /* ───────── inline lead form ───────── */
 const InlineLeadForm = ({ id, variant = "dark" }: { id: string; variant?: "dark" | "light" }) => {
+  const router = useRouter();
   const [step, setStep] = useState(1);
   const [email, setEmail] = useState("");
   const [submitted, setSubmitted] = useState(false);
@@ -48,6 +50,7 @@ const InlineLeadForm = ({ id, variant = "dark" }: { id: string; variant?: "dark"
       setSubmitted(true);
       typeof window !== "undefined" && (window as any).gtag && (window as any).gtag('event', 'generate_lead');
       toast.success("Thank you! We'll be in touch within 24 hours!");
+    router.push("/thank-you");
     } catch (error) {
       toast.error("Something went wrong. Please try again.");
     } finally {

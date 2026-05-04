@@ -8,6 +8,7 @@ import Footer from "@/components/Footer";
 import { toast } from "sonner";
 
 import CrossLinkSection from "@/components/CrossLinkSection";
+import { useRouter } from "next/navigation";
 
 const stats = [
   { value: "80+", label: "Apps Built" },
@@ -38,6 +39,7 @@ const process = [
 ];
 
 const ShopifyAppDev = () => {
+  const router = useRouter();
   const [submitted, setSubmitted] = useState(false);
   const [isSubmitting, setIsSubmitting] = useState(false);
 
@@ -56,6 +58,7 @@ const ShopifyAppDev = () => {
       toast.success("Proposal Requested!", {
         description: "Our team will review your requirements and respond within 48 hours.",
       });
+    router.push("/thank-you");
     } catch (error) {
       toast.error("Something went wrong. Please try again later.");
     } finally {

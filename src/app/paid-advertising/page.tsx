@@ -6,6 +6,7 @@ import CrossLinkSection from "@/components/CrossLinkSection";
 
 import { motion } from "framer-motion";
 import { ArrowRight, Target, Zap, BarChart3, Users, MousePointer, RefreshCw, CheckCircle2 } from "lucide-react";
+import { useRouter } from "next/navigation";
 
 const stats = [
   { value: "4.2x", label: "Average ROAS" },
@@ -140,6 +141,7 @@ const PaidAdvertising = () => {
                     toast.success("Audit Requested!", {
                       description: "We'll be in touch within 24 hours.",
                     });
+    router.push("/thank-you");
                   });
                   (e.target as HTMLFormElement).reset();
                 } catch (error) {

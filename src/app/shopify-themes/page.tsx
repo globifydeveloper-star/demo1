@@ -8,6 +8,7 @@ import Footer from "@/components/Footer";
 import { toast } from "sonner";
 
 import CrossLinkSection from "@/components/CrossLinkSection";
+import { useRouter } from "next/navigation";
 
 const stats = [
   { value: "300+", label: "Stores Designed" },
@@ -39,6 +40,7 @@ const results = [
 ];
 
 const ShopifyThemes = () => {
+  const router = useRouter();
   const [submitted, setSubmitted] = useState(false);
   const [isSubmitting, setIsSubmitting] = useState(false);
 
@@ -59,6 +61,7 @@ const ShopifyThemes = () => {
       toast.success("Quote Requested!", {
         description: "Our design team will reach out within 24 hours.",
       });
+    router.push("/thank-you");
     } catch (error) {
       toast.error("Something went wrong. Please try again.");
     } finally {

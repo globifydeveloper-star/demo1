@@ -7,6 +7,7 @@ import { ArrowRight, CheckCircle2, Send, Factory, Cpu, Brain, BarChart3, Users, 
 import Navbar from "@/components/Navbar";
 import Footer from "@/components/Footer";
 import { toast } from "sonner";
+import { useRouter } from "next/navigation";
 
 
 const stats = [
@@ -35,6 +36,7 @@ const whyGlobify = [
 ];
 
 const IndustryManufacturing = () => {
+  const router = useRouter();
   const [submitted, setSubmitted] = useState(false);
   const [isSubmitting, setIsSubmitting] = useState(false);
 
@@ -53,6 +55,7 @@ const IndustryManufacturing = () => {
       toast.success("Assessment Requested!", {
         description: "Our manufacturing team will respond within 24 hours.",
       });
+    router.push("/thank-you");
     } catch (error) {
       toast.error("Something went wrong. Please try again later.");
     } finally {

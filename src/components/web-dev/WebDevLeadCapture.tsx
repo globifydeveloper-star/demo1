@@ -6,9 +6,11 @@ import { ArrowRight, CheckCircle2, Send, Loader2 } from "lucide-react";
 import { useContactDialog } from "@/contexts/ContactDialogContext";
 import contactSupportImg from "@/assets/contact-support.png";
 import { toast } from "sonner";
+import { useRouter } from "next/navigation";
 
 const WebDevLeadCapture = () => {
   const { openContactDialog } = useContactDialog();
+  const router = useRouter();
   const [isSubmitting, setIsSubmitting] = useState(false);
 
   const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
@@ -25,6 +27,7 @@ const WebDevLeadCapture = () => {
       toast.success("Consultation Requested!", {
         description: "We'll get back to you within 24 hours.",
       });
+    router.push("/thank-you");
       (e.target as HTMLFormElement).reset();
     } catch (error) {
       toast.error("Something went wrong. Please try again later.");

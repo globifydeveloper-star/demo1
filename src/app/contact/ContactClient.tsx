@@ -6,6 +6,7 @@ import { MapPin, Phone, Mail, Send, Loader2, ArrowRight } from "lucide-react";
 import { toast } from "sonner";
 import Navbar from "@/components/Navbar";
 import Footer from "@/components/Footer";
+import { useRouter } from "next/navigation";
 
 const offices = [
   {
@@ -26,6 +27,7 @@ const offices = [
 ];
 
 const ContactClient = () => {
+  const router = useRouter();
   const [isSubmitting, setIsSubmitting] = useState(false);
 
   const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
@@ -42,6 +44,7 @@ const ContactClient = () => {
       toast.success("Message Sent!", {
         description: "We'll be in touch within 24 hours.",
       });
+    router.push("/thank-you");
       (e.target as HTMLFormElement).reset();
     } catch (error) {
       toast.error("Something went wrong. Please try again later.");
